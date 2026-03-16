@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TruthStack × PSB Xchange — Completing the ₹3 Lakh Crore Vision</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #0c0f0a;
+  --ink2:     #2e302b;
+  --ink3:     #6b6d66;
+  --ink4:     #a8aaa3;
+  --gold:     #c8922a;
+  --gold2:    #e8b84a;
+  --gold-t:   rgba(200,146,42,.07);
+  --gold-t2:  rgba(200,146,42,.18);
+  --green:    #2d6a4f;
+  --green2:   #40916c;
+  --green-t:  rgba(45,106,79,.07);
+  --red-t:    rgba(160,50,30,.05);
+  --red:      rgba(170,65,35,.55);
+  --bg:       #ffffff;
+  --bg2:      #f9f8f5;
+  --bg3:      #f2f0ec;
+  --rule:     #e4e1db;
+  --rule2:    #edeae5;
+  --mono:     'IBM Plex Mono', monospace;
+  --display:  'DM Serif Display', Georgia, serif;
+  --sans:     'Inter', system-ui, sans-serif;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+/* ── PRIMITIVES ── */
+.gold-top{height:2px;background:linear-gradient(90deg,var(--gold) 0%,transparent 55%);}
+.kicker{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.kicker::after{content:'';flex:0 0 24px;height:1px;background:var(--gold);}
+.h2{font-family:var(--display);font-size:clamp(22px,3.2vw,32px);font-weight:400;color:var(--ink);line-height:1.12;letter-spacing:-.01em;}
+.h2 em{font-style:italic;color:var(--gold);}
+.slide-foot{display:flex;justify-content:space-between;align-items:center;padding-top:22px;margin-top:2px;border-top:1px solid var(--rule2);}
+.slide-tag{font-family:var(--mono);font-size:8.5px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink4);}
+
+/* ── COVER ── */
+.cover{padding:60px 0 0;width:100%;}
+.cover-inner{max-width:860px;margin:0 auto;padding:0 40px;}
+.cover-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:36px;}
+.cover-eyebrow{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;}
+.cover-h1{font-family:var(--display);font-size:clamp(38px,5.5vw,60px);font-weight:400;line-height:1.04;color:var(--ink);letter-spacing:-.02em;}
+.cover-h1 em{font-style:italic;color:var(--gold);}
+.cover-meta{text-align:right;padding-top:6px;}
+.cover-wordmark{font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--ink3);margin-bottom:5px;}
+.cover-wordmark strong{color:var(--ink);}
+.cover-date{font-family:var(--mono);font-size:9px;color:var(--ink4);letter-spacing:.08em;}
+.cover-premise{font-size:15px;font-weight:400;color:var(--ink2);line-height:1.8;margin-bottom:36px;border-left:2px solid var(--gold);padding-left:18px;}
+.cover-premise strong{color:var(--ink);font-weight:600;}
+.stat-strip{max-width:860px;margin:0 auto;border:1px solid var(--rule);}
+.vision-banner{padding:16px 20px;border-bottom:1px solid var(--rule);background:var(--gold-t);}
+.vision-banner-text{font-family:var(--display);font-size:clamp(13px,1.8vw,16px);font-weight:400;color:var(--ink);line-height:1.5;letter-spacing:-.01em;}
+.vision-banner-text em{font-style:italic;color:var(--gold);}
+.impact-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+.impact-cell{padding:16px 20px;border-right:1px solid var(--rule);}
+.impact-cell:last-child{border-right:none;}
+.impact-icon{font-size:13px;margin-bottom:6px;}
+.impact-title{font-size:11.5px;font-weight:600;color:var(--ink);line-height:1.25;margin-bottom:3px;}
+.impact-desc{font-size:10px;font-weight:400;color:var(--ink4);line-height:1.45;}
+.cover-footer{max-width:860px;margin:0 auto;padding:16px 40px;}
+
+/* ── POSITIONING ── */
+.pos-strip{background:var(--gold-t);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:22px 40px;}
+.pos-inner{max-width:860px;margin:0 auto;display:grid;grid-template-columns:110px 1fr;gap:20px;align-items:center;}
+.pos-label{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+.pos-text{font-size:13.5px;font-weight:400;color:var(--ink2);line-height:1.65;}
+.pos-text strong{color:var(--ink);font-weight:600;}
+
+/* ── SECTION ── */
+.sec{padding:52px 40px;border-top:1px solid var(--rule);}
+.sec-inner{max-width:860px;margin:0 auto;}
+.sec-head{margin-bottom:28px;}
+.sec-sub{font-size:12.5px;font-weight:400;color:var(--ink3);line-height:1.7;margin-top:10px;max-width:660px;}
+
+/* ── BEFORE / AFTER ── */
+.ba{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule);}
+.ba-col.before{background:var(--bg);}
+.ba-col.after{background:var(--bg2);}
+.ba-head{padding:10px 18px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;border-bottom:1px solid var(--rule);}
+.ba-col.before .ba-head{color:var(--ink4);background:var(--bg3);}
+.ba-col.after  .ba-head{color:var(--gold);background:var(--gold-t);}
+.ba-item{display:flex;gap:14px;padding:13px 18px;border-bottom:1px solid var(--rule2);align-items:flex-start;}
+.ba-item:last-child{border-bottom:none;}
+.ba-mark{font-family:var(--mono);font-size:12px;font-weight:500;flex-shrink:0;padding-top:1px;width:16px;}
+.ba-col.before .ba-mark{color:var(--red);}
+.ba-col.after  .ba-mark{color:var(--green2);}
+.ba-title{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:3px;line-height:1.2;}
+.ba-desc{font-size:11px;font-weight:400;color:var(--ink3);line-height:1.55;}
+.verdict{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule);border-top:none;}
+.v-cell{padding:16px 18px;}
+.v-before{background:var(--red-t);}
+.v-after {background:var(--green-t);}
+.v-val{font-family:var(--mono);font-size:clamp(20px,3vw,30px);font-weight:500;line-height:1;margin-bottom:5px;}
+.v-before .v-val{color:var(--red);}
+.v-after  .v-val{color:var(--green2);}
+.v-lbl{font-size:10.5px;font-weight:400;color:var(--ink4);line-height:1.4;}
+
+/* AI strip */
+.ai-strip{border:1px solid var(--rule);border-top:1px solid var(--gold-t2);background:var(--gold-t);padding:18px 20px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start;}
+.ai-lbl{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);white-space:nowrap;padding-top:2px;}
+.ai-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;}
+.ai-body{font-size:11.5px;font-weight:400;color:var(--ink3);line-height:1.55;}
+.ai-body strong{color:var(--ink);font-weight:600;}
+.ai-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
+.ai-chip{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.06em;color:var(--gold);border:1px solid rgba(200,146,42,.28);padding:3px 8px;background:var(--bg);}
+
+/* ── READINESS ── */
+.r-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule);}
+.r-card{padding:22px 20px;border-right:1px solid var(--rule);}
+.r-card:last-child{border-right:none;}
+.r-tag{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.r-title{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.25;}
+.r-desc{font-size:11px;font-weight:400;color:var(--ink3);line-height:1.6;}
+
+/* ── ANCHOR PAIR ── */
+.anchor-pair{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--rule);}
+.anc{padding:24px 22px;border-right:1px solid var(--rule);}
+.anc:last-child{border-right:none;}
+.anc.net{background:var(--bg2);}
+.anc-k{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.anc.net .anc-k{color:var(--green2);}
+.anc-title{font-family:var(--display);font-size:clamp(15px,2.2vw,19px);font-weight:400;color:var(--ink);line-height:1.2;margin-bottom:10px;}
+.anc-title em{font-style:italic;color:var(--gold);}
+.anc.net .anc-title em{color:var(--green2);}
+.anc-desc{font-size:12px;font-weight:400;color:var(--ink3);line-height:1.65;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--rule2);}
+.anc-desc strong{color:var(--ink);font-weight:600;}
+.proof{display:flex;flex-direction:column;gap:7px;}
+.p-item{font-size:11px;font-weight:400;color:var(--ink3);line-height:1.45;display:flex;align-items:flex-start;gap:9px;}
+.p-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.anc.ver .p-dot{background:var(--gold);}
+.anc.net .p-dot{background:var(--green2);}
+.p-item strong{color:var(--ink2);font-weight:600;}
+
+/* moat */
+.moat{border:1px solid var(--rule);border-top:1px solid var(--gold-t2);background:var(--gold-t);padding:18px 22px;}
+.moat-k{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.moat-body{font-family:var(--display);font-size:clamp(13px,1.8vw,16px);font-weight:400;color:var(--ink);line-height:1.6;}
+.moat-body strong{font-weight:400;color:var(--gold);}
+
+/* ts30 large number scale */
+.scale{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule);border-top:none;}
+.scale-step{padding:20px 22px;border-right:1px solid var(--rule);}
+.scale-step:last-child{border-right:none;}
+.scale-num{font-family:var(--mono);font-size:clamp(44px,6vw,64px);font-weight:500;color:var(--green2);line-height:1;margin-bottom:3px;letter-spacing:-.02em;}
+.scale-sub{font-family:var(--mono);font-size:9px;font-weight:400;color:var(--ink4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;}
+.scale-desc{font-size:10.5px;font-weight:400;color:var(--ink3);line-height:1.4;}
+
+/* ── TOPOLOGY ── */
+.topo-wrap{display:grid;grid-template-columns:1fr 175px;border:1px solid var(--rule);overflow:hidden;}
+.topo-vpc{border-right:2px dashed var(--rule);}
+.topo-vpc-head{padding:10px 18px;border-bottom:1px solid var(--rule);background:var(--bg3);font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);display:flex;justify-content:space-between;align-items:center;}
+.topo-vpc-head span{color:var(--ink4);font-size:9px;text-transform:none;letter-spacing:.02em;font-weight:400;font-family:var(--sans);}
+.topo-vpc-body{padding:16px 18px 0;}
+.topo-engine-name{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px;}
+.topo-engine-desc{font-size:11px;font-weight:400;color:var(--ink3);line-height:1.6;margin-bottom:14px;}
+.topo-consortium{background:rgba(45,106,79,.07);border:1px solid rgba(45,106,79,.15);padding:10px 14px;}
+.topo-consortium-name{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--green2);margin-bottom:4px;}
+.topo-consortium-desc{font-size:10.5px;font-weight:400;color:var(--ink3);line-height:1.5;}
+.topo-zero{margin:12px 18px 16px;padding:8px 12px;background:rgba(45,106,79,.07);border-left:2px solid var(--green2);font-family:var(--mono);font-size:9.5px;font-weight:500;color:var(--green2);letter-spacing:.04em;display:flex;align-items:center;gap:7px;}
+.topo-zero::before{content:'✓';}
+.topo-cloud{background:var(--bg2);display:flex;flex-direction:column;}
+.topo-cloud-head{padding:10px 14px;border-bottom:1px solid var(--rule);}
+.topo-cloud-name{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px;}
+.topo-cloud-sub{font-size:10px;font-weight:400;color:var(--ink4);}
+.topo-cloud-items{padding:12px 14px;flex:1;display:flex;flex-direction:column;gap:8px;}
+.topo-cloud-item{font-size:10.5px;color:var(--ink3);font-weight:400;display:flex;align-items:center;gap:8px;line-height:1.3;}
+.topo-cloud-item::before{content:'';width:3px;height:3px;background:var(--gold);border-radius:50%;flex-shrink:0;}
+.topo-never{border-top:1px solid var(--rule);padding:9px 14px;background:var(--gold-t);font-family:var(--mono);font-size:9px;font-weight:500;color:var(--gold);line-height:1.5;}
+
+/* ── FIT CARDS ── */
+.fit-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule);}
+.fit-card{background:var(--bg);padding:22px 20px;border-right:1px solid var(--rule);}
+.fit-card:last-child{border-right:none;}
+.fit-tag{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.fit-name{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.25;}
+.fit-desc{font-size:11px;font-weight:400;color:var(--ink3);line-height:1.6;margin-bottom:10px;}
+.fit-proof{font-family:var(--mono);font-size:9px;font-weight:400;color:var(--ink2);background:var(--gold-t);border-top:1px solid var(--gold-t2);padding:8px 10px;margin:-22px -20px 0;margin-top:10px;line-height:1.65;}
+.phil{display:flex;border:1px solid var(--rule);border-top:none;}
+.phil span{flex:1;padding:9px 14px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);text-align:center;border-right:1px solid var(--rule);}
+.phil span:last-child{border-right:none;}
+
+/* ── PILOT ── */
+.pilot{border:1px solid var(--rule);overflow:hidden;}
+.pilot-head{background:var(--bg3);padding:16px 22px;border-bottom:1px solid var(--rule);}
+.pilot-head-k{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.pilot-head-title{font-family:var(--display);font-size:18px;font-weight:400;color:var(--ink);line-height:1.2;}
+.pilot-head-title em{font-style:italic;color:var(--gold);}
+.pilot-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.pilot-col{padding:20px 22px;border-right:1px solid var(--rule);}
+.pilot-col:last-child{border-right:none;}
+.pilot-col-k{font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);margin-bottom:12px;}
+.pilot-item{font-size:11.5px;font-weight:400;color:var(--ink2);line-height:1.6;padding:6px 0;border-bottom:1px solid var(--rule2);display:flex;align-items:flex-start;gap:10px;}
+.pilot-item:last-child{border-bottom:none;padding-bottom:0;}
+.pilot-item::before{content:'→';font-family:var(--mono);font-size:10px;color:var(--gold);flex-shrink:0;padding-top:2px;}
+
+/* ── CLOSE ── */
+.close-sec{padding:52px 40px 64px;border-top:2px solid var(--gold);}
+.close-inner{max-width:860px;margin:0 auto;}
+.close-kicker{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.close-kicker::after{content:'';flex:0 0 24px;height:1px;background:var(--gold);}
+.close-stmt{font-family:var(--display);font-size:clamp(18px,2.5vw,26px);font-weight:400;color:var(--ink);line-height:1.45;max-width:680px;margin-bottom:36px;letter-spacing:-.01em;}
+.close-stmt em{font-style:italic;color:var(--gold);}
+.close-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.cs{padding:18px 20px;border-right:1px solid var(--rule);}
+.cs:last-child{border-right:none;}
+.cs-val{font-family:var(--mono);font-size:clamp(18px,2.8vw,26px);font-weight:500;color:var(--ink);line-height:1;margin-bottom:5px;letter-spacing:-.01em;}
+.cs-lbl{font-size:10px;font-weight:400;color:var(--ink4);line-height:1.4;}
+.close-note{margin-top:28px;padding:18px 22px;border:1px solid var(--rule);border-top:1px solid var(--gold-t2);background:var(--gold-t);}
+.close-note-text{font-size:13px;font-weight:400;color:var(--ink2);line-height:1.75;}
+.close-note-text strong{color:var(--ink);font-weight:600;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .cover-inner{padding:0 20px;}
+  .cover-footer{padding:16px 20px;}
+  .stat-strip{margin:0 20px;}
+  .sec,.close-sec,.pos-strip{padding-left:20px;padding-right:20px;}
+  .cover-top{flex-direction:column;gap:14px;}
+  .cover-meta{text-align:left;}
+  .impact-grid{grid-template-columns:1fr 1fr;}
+  .pos-inner{grid-template-columns:1fr;}
+  .ba{grid-template-columns:1fr;}
+  .verdict{grid-template-columns:1fr 1fr;}
+  .ai-strip{grid-template-columns:1fr;}
+  .anchor-pair{grid-template-columns:1fr;}
+  .scale{grid-template-columns:repeat(3,1fr);}
+  .topo-wrap{grid-template-columns:1fr;}
+  .topo-cloud{border-top:1px solid var(--rule);}
+  .fit-grid{grid-template-columns:1fr;}
+  .pilot-grid{grid-template-columns:1fr;}
+  .close-stats{grid-template-columns:1fr 1fr;}
+  .phil{flex-wrap:wrap;}
+  .phil span{width:50%;flex:none;}
+  .r-grid{grid-template-columns:1fr;}
+  .readiness-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="gold-top"></div>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-inner">
+  <div class="cover-top">
+    <div>
+      <div class="cover-eyebrow">Strategic Partnership Brief · TruthStack × PSB Xchange</div>
+      <h1 class="cover-h1">The rail is ready.<br>The intelligence is here.<br><em>Every MSME application — decision-ready.</em></h1>
+    </div>
+    <div class="cover-meta">
+      <div class="cover-wordmark"><strong>TRUTHSTACK</strong> × <strong>PSB XCHANGE</strong></div>
+      <div class="cover-date">March 2026</div>
+    </div>
+  </div>
+  <p class="cover-premise">PSB Xchange is the common technology bridge India's MSME credit ecosystem needed — 12 public sector banks, one interoperable rail, credit moving at the speed of data. <strong>TruthStack is the verification intelligence layer built to sit precisely inside it — so every matched application arrives at the credit officer's desk as a decision, not a file. Two platforms. One purpose.</strong></p>
+  </div>
+
+  <div class="stat-strip">
+    <div class="vision-banner">
+      <div class="vision-banner-text">PSB Xchange routes the application. TruthStack verifies it. <em>Together, every matched lead arrives at the credit officer's desk as a decision — verified, fraud-checked, and credit-profiled across 12 PSBs and 13 lending products.</em></div>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-cell">
+        <div class="impact-icon">⚡</div>
+        <div class="impact-title">Faster decisioning</div>
+        <div class="impact-desc">STP-eligible applications go straight to decision. Flagged files arrive with resolution paths — not raw data to interpret.</div>
+      </div>
+      <div class="impact-cell">
+        <div class="impact-icon">📈</div>
+        <div class="impact-title">Scale at 30L / year</div>
+        <div class="impact-desc">Verification that runs in under 2 minutes per application — designed to scale with PSB Xchange's full volume without adding headcount.</div>
+      </div>
+      <div class="impact-cell">
+        <div class="impact-icon">🔌</div>
+        <div class="impact-title">Lender &amp; product agnostic</div>
+        <div class="impact-desc">One API. All 13 PSB Xchange product types. Every participating PSB applies its own risk lens. No bank modifies its credit policy to join.</div>
+      </div>
+      <div class="impact-cell">
+        <div class="impact-icon">🔒</div>
+        <div class="impact-title">Sovereign by design</div>
+        <div class="impact-desc">Sealed microservice inside PSB Xchange's VPC. All processing in RAM. Zero data egress. RBI, CVC, and DPDP addressed by architecture.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cover-footer">
+    <div class="slide-foot">
+      <span class="slide-tag">TruthStack · API-First Verification Infrastructure</span>
+      <span class="slide-tag">01 / 02 · For Discussion · March 2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- POSITIONING -->
+<div class="pos-strip">
+  <div class="pos-inner">
+    <span class="pos-label">What TruthStack Is</span>
+    <div class="pos-text"><strong>TruthStack is API-first verification intelligence infrastructure for MSME lending.</strong> Engineered to sit between data fetch and credit decision — running Recency, Accuracy, Traceability, and Fraud checks across 60+ deterministic checkpoints and a governed AI advisory layer, generating a forensic Risk Ready Packet in under 2 minutes.</div>
+  </div>
+</div>
+
+<!-- 01 / THE PARTNERSHIP PROPOSITION -->
+<div class="sec">
+  <div class="sec-inner">
+    <div class="sec-head">
+      <div class="kicker">01 / The Partnership Proposition</div>
+      <div class="h2">PSB Xchange routes every matched application to the right lender.<br><em>TruthStack ensures it arrives decision-ready.</em></div>
+    </div>
+
+    <div class="ba">
+      <div class="ba-col before">
+        <div class="ba-head">Today — Raw Lead File on the Credit Officer's Desk</div>
+        <div class="ba-item"><div class="ba-mark">✕</div><div><div class="ba-title">A full day of stare and compare</div><div class="ba-desc">GST, bank statements, and invoice data reconciled manually at BoB, CBI, IOB, UCO — source by source, variance by variance. Most of the working day gone before assessment begins.</div></div></div>
+        <div class="ba-item"><div class="ba-mark">✕</div><div><div class="ba-title">Fraud screen in isolation</div><div class="ba-desc">Each PSB works alone. Duplicate invoices across banks, circular trading rings — invisible without cross-lender signal. The officer has no way to know.</div></div></div>
+        <div class="ba-item"><div class="ba-mark">✕</div><div><div class="ba-title">CAM built from scratch</div><div class="ba-desc">Creditworthiness computed, evidence gathered, credit appraisal memo compiled and routed for review — all before assessment can begin.</div></div></div>
+      </div>
+      <div class="ba-col after">
+        <div class="ba-head">With TruthStack — Risk Ready Packet</div>
+        <div class="ba-item"><div class="ba-mark">✓</div><div><div class="ba-title">RATF verification already done</div><div class="ba-desc">Recency, Accuracy (GST, bank, invoice), Traceability, Fraud — 60+ checks run. STP-eligible files flagged for straight-through decisioning. Flagged files arrive with prioritised flags and resolution paths.</div></div></div>
+        <div class="ba-item"><div class="ba-mark">✓</div><div><div class="ba-title">Cross-PSB fraud intelligence embedded</div><div class="ba-desc">Consortium fraud signals already checked. Duplicate financing detected before the file reaches the desk. The credit officer sees a clean packet — or a specific flag to act on.</div></div></div>
+        <div class="ba-item"><div class="ba-mark">✓</div><div><div class="ba-title">Credit officer acts — not prepares</div><div class="ba-desc">9-section Credit Intelligence Summary compiled. CAM structured for up to 90% auto-population. The officer opens the file and makes a decision. The 7–8 day cycle compresses to same day for verified applications.</div></div></div>
+      </div>
+    </div>
+
+    <div class="ai-strip">
+      <div class="ai-lbl">Governed AI</div>
+      <div>
+        <div class="ai-title">AI that advises — never decides. Fully auditable, fully controlled.</div>
+        <div class="ai-body">Designed to surface what deterministic rules cannot detect — <strong>document tampering, behavioural anomalies, indirect network fraud, predictive default signals</strong> — only above 85% confidence. <strong>Not a black box. Rules decide. AI advises. Humans judge.</strong></div>
+        <div class="ai-chips">
+          <span class="ai-chip">Document Forensics</span>
+          <span class="ai-chip">Behavioural Patterns</span>
+          <span class="ai-chip">Network Intelligence</span>
+          <span class="ai-chip">Predictive Risk</span>
+          <span class="ai-chip">≥85% Confidence Gate</span>
+          <span class="ai-chip">Zero Flag Fatigue</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-foot" style="padding-top:22px;margin-top:22px;border-top:1px solid var(--rule2);">
+      <span class="slide-tag">TruthStack · Verification Intelligence</span>
+      <span class="slide-tag">01 / 02</span>
+    </div>
+  </div>
+</div>
+
+<!-- 02 / CAPABILITIES + THE ASK -->
+<div class="sec" style="border-bottom:none;">
+  <div class="sec-inner">
+    <div class="sec-head">
+      <div class="kicker">02 / Two Capabilities. One Infrastructure.</div>
+      <div class="h2">Verification intelligence + consortium fraud network — <em>engineered to operate inside PSB Xchange.</em></div>
+    </div>
+
+    <div class="anchor-pair">
+      <div class="anc ver">
+        <div class="anc-k">Verification Intelligence</div>
+        <div class="anc-title">Every application assessed<br><em>before the team opens it.</em></div>
+        <div class="anc-desc">60+ deterministic checkpoints across four structured pillars — <strong>Recency, Accuracy, Traceability, Fraud</strong> — followed by a governed AI advisory layer that surfaces only what rules cannot catch, above 85% confidence. <strong>Teams act on what matters. Not noise.</strong></div>
+        <div class="proof">
+          <div class="p-item"><span class="p-dot"></span><strong>Recency</strong> — is the business operationally current? Stale-data signals detected before the credit desk</div>
+          <div class="p-item"><span class="p-dot"></span><strong>Accuracy</strong> — GST, bank statements, and invoice data cross-reconciled. Three independent sources cannot all be fabricated.</div>
+          <div class="p-item"><span class="p-dot"></span><strong>Traceability</strong> — every data point traced to its originating source. Incomplete evidence chains surfaced.</div>
+          <div class="p-item"><span class="p-dot"></span><strong>Fraud</strong> — discrete checks across document integrity, circular trading patterns, behavioural anomalies, and network signals</div>
+        </div>
+      </div>
+      <div class="anc net">
+        <div class="anc-k">Consortium Fraud Pattern Intelligence</div>
+        <div class="anc-title">Method-level fraud patterns detected<br><em>across PSBs — no borrower data shared.</em></div>
+        <div class="anc-desc">Designed as a PSB Xchange-governed intelligence layer — not an inter-bank data exchange. Fraud <strong>method signatures and anonymised transaction patterns</strong> are shared across participating PSBs. No borrower identity, no raw application data, no portfolio exposure crosses any institutional boundary.</div>
+        <div class="proof">
+          <div class="p-item"><span class="p-dot"></span>Bank of Baroda processes an invoice — an anonymised fingerprint enters the consortium layer. UCO Bank receives the same invoice — the match is detected before the file reaches any desk</div>
+          <div class="p-item"><span class="p-dot"></span>A fraud method pattern identified at one PSB is shared as a behavioural signature — all participating banks are alerted immediately</div>
+          <div class="p-item"><span class="p-dot"></span>Detection coverage strengthens as more PSBs participate — the signal quality compounds with network scale</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:28px;font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--ink4);margin-bottom:10px;">Why TruthStack is a Natural Fit for PSB Xchange</div>
+    <div class="fit-grid">
+      <div class="fit-card">
+        <div class="fit-tag">01 · Scales Automatically</div>
+        <div class="fit-name">One integration. All 13 PSB Xchange product types. Every product added going forward.</div>
+        <div class="fit-desc">One API call covers all 13 PSB Xchange product types — Invoice Factoring applies buyer and receivables logic, Working Capital applies cash-flow and banking conduct logic. PSB Xchange adds a product, TruthStack adds a cartridge.</div>
+        <div class="fit-proof">Invoice Factoring → buyer quality + receivables checks<br>Working Capital → cash-flow + banking conduct checks</div>
+      </div>
+      <div class="fit-card">
+        <div class="fit-tag">02 · Compliance by Architecture</div>
+        <div class="fit-name">RBI data localisation, CVC, and DPDP addressed by architecture</div>
+        <div class="fit-desc">Sealed microservice inside PSB Xchange's own VPC — processing in RAM, data purged on completion. Designed to align with RBI data localisation, CVC audit requirements, and DPDP obligations without policy workaround or InfoSec negotiation.</div>
+        <div class="fit-proof">Zero data egress · CVC-aligned · DPDP by design · Single deployment architecture</div>
+      </div>
+      <div class="fit-card">
+        <div class="fit-tag">03 · Each Bank's Own Lens</div>
+        <div class="fit-name">Same forensic engine. Each bank's own risk policy.</div>
+        <div class="fit-desc">The same verification standard runs across all participating PSBs — consistent and auditable. Each bank independently configures its own thresholds, weightings, and overlays.</div>
+        <div class="fit-proof">Shared verification standard · Individual risk sovereignty</div>
+      </div>
+    </div>
+    <div class="phil">
+      <span>Rules Decide</span>
+      <span>AI Advises</span>
+      <span>Humans Judge</span>
+      <span>Zero Data Egress · Ever</span>
+    </div>
+
+    <div style="margin-top:28px;">
+      <div class="pilot">
+        <div class="pilot-head">
+          <div class="pilot-head-k">The Ask</div>
+          <div class="pilot-head-title">Exploratory conversation → Live demo → <em>Pilot together.</em></div>
+        </div>
+        <div class="pilot-grid">
+          <div class="pilot-col">
+            <div class="pilot-col-k">Step 1 — The conversation we are asking for</div>
+            <div class="pilot-item">A 30-minute conversation — to share what we have built and understand where verification fits in PSB Xchange's roadmap</div>
+            <div class="pilot-item">No commitment, no follow-up deck — just an honest discussion about whether these two infrastructures belong together</div>
+          </div>
+          <div class="pilot-col">
+            <div class="pilot-col-k">Step 2 — If it resonates, we show it live</div>
+            <div class="pilot-item">A working Risk Ready Packet generated on a representative MSME application — RATF verification, AI advisory, Credit Intelligence Summary, end to end</div>
+            <div class="pilot-item">Your credit team sees exactly what lands on the desk before an assessment begins</div>
+          </div>
+          <div class="pilot-col">
+            <div class="pilot-col-k">Step 3 — If the demo lands, we design the pilot together</div>
+            <div class="pilot-item">2–3 PSBs, two lending products, defined volume — scoped entirely around what works for PSB Xchange</div>
+            <div class="pilot-item">The consortium governance model designed collaboratively as part of the pilot, not before it</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-foot" style="padding-top:22px;margin-top:22px;border-top:1px solid var(--rule2);">
+      <span class="slide-tag">TruthStack · Verification Intelligence</span>
+      <span class="slide-tag">02 / 02</span>
+    </div>
+  </div>
+</div>
+
+<!-- CLOSE -->
+<div class="close-sec">
+  <div class="close-inner">
+    <div class="close-kicker">The rail is ready. The intelligence is here.</div>
+    <div class="close-stats">
+      <div class="cs"><div class="cs-val">30L / Yr</div><div class="cs-lbl">MSME applications on PSB Xchange's rail — every one verified before pickup</div></div>
+      <div class="cs"><div class="cs-val">12 PSBs</div><div class="cs-lbl">On one shared rail — consortium fraud intelligence designed to scale across all</div></div>
+      <div class="cs"><div class="cs-val">&lt;2 min</div><div class="cs-lbl">Matched lead to Risk Ready Packet — credit officer opens a decision, not a file</div></div>
+      <div class="cs"><div class="cs-val">₹3L Cr</div><div class="cs-lbl">The vision — structurally executable with verification intelligence in the loop</div></div>
+    </div>
+    <div class="close-note">
+      <div class="close-note-text">The ask is simple — <strong>a 30-minute conversation</strong> to share what we have built and understand where this fits in PSB Xchange's thinking. If it resonates, we show it live. If the demo lands, we build the pilot together. <strong>The goal is not a deal. It is a partnership that makes every MSME application on PSB Xchange's rail decision-ready.</strong></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
