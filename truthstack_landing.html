@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TruthStack — Forensic Verification Infrastructure for MSME Lending</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #0c0f0a; --ink2:   #2e302b; --ink3:   #6b6d66; --ink4:   #a8aaa3;
+  --gold:   #c8922a; --gold2:  #e8b84a; --gold-t: rgba(200,146,42,.07); --gold-b: rgba(200,146,42,.22);
+  --green:  #40916c; --green-t:rgba(64,145,108,.08); --green-b:rgba(64,145,108,.3);
+  --red:    #a32d2d; --red-t:  #fcebeb; --red-b:  #f7c1c1;
+  --amb:    #854f0b; --amb-t:  #faeeda; --amb-b:  #fac775;
+  --bg:     #faf9f6; --bg2:    #f4f2ed; --rule:   #e4e1db;
+  --mono:   'IBM Plex Mono', monospace; --disp: 'DM Serif Display', Georgia, serif; --body: 'Lora', Georgia, serif;
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--ink); font-family:var(--body); -webkit-font-smoothing:antialiased; font-size:16px; line-height:1.82; }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(250,249,246,.92); backdrop-filter:blur(14px); border-bottom:1px solid var(--rule); height:52px; display:flex; align-items:center; padding:0 clamp(20px,5vw,80px); justify-content:space-between; }
+.nav-logo { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--ink); }
+.nav-logo span { color:var(--gold); }
+.nav-links { display:flex; gap:24px; list-style:none; }
+.nav-links a { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); text-decoration:none; transition:color .15s; }
+.nav-links a:hover { color:var(--gold); }
+.nav-cta { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); border:1px solid var(--gold-b); padding:6px 14px; text-decoration:none; transition:background .15s; }
+.nav-cta:hover { background:var(--gold-t); }
+@media(max-width:720px){ .nav-links { display:none; } }
+
+/* SHARED */
+section { padding:clamp(72px,9vw,120px) clamp(20px,5vw,80px); }
+.label { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.26em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; display:block; }
+h1, h2 { font-family:var(--disp); font-weight:400; letter-spacing:-.02em; line-height:1.06; color:var(--ink); }
+h1 { font-size:clamp(36px,5.5vw,66px); margin-bottom:20px; }
+h2 { font-size:clamp(26px,3.8vw,44px); margin-bottom:20px; }
+h1 em, h2 em { font-style:italic; color:var(--gold); }
+.lead { font-size:clamp(14px,1.5vw,16px); color:var(--ink3); line-height:1.8; max-width:560px; }
+.rule-line { height:1px; background:var(--rule); margin:0 clamp(20px,5vw,80px); }
+.mono-note { font-family:var(--mono); font-size:10px; color:var(--ink4); letter-spacing:.06em; margin-top:12px; }
+.anchor-ref { margin-top:20px; padding:11px 16px 11px 18px; background:var(--bg2); border-left:3px solid var(--gold); font-size:13px; color:var(--ink3); line-height:1.6; }
+.anchor-ref strong { color:var(--ink); }
+
+/* HERO */
+#hero { padding-top:clamp(96px,11vw,148px); padding-bottom:clamp(56px,7vw,88px); display:grid; grid-template-columns:1fr 1fr; gap:clamp(36px,5vw,72px); align-items:center; max-width:1200px; margin:0 auto; }
+.hero-stat { border:1px solid var(--rule); padding:14px 18px; display:flex; flex-direction:column; gap:4px; background:var(--bg2); }
+.hero-stat-v { font-family:var(--mono); font-size:24px; font-weight:500; color:var(--ink); line-height:1; }
+.hero-stat-l { font-family:var(--mono); font-size:10px; color:var(--ink4); letter-spacing:.08em; text-transform:uppercase; }
+.hero-pillars { display:flex; flex-direction:column; gap:0; border:1px solid var(--rule); margin-top:8px; }
+.hero-pillar { padding:13px 17px; border-bottom:1px solid var(--rule); display:flex; gap:12px; align-items:flex-start; }
+.hero-pillar:last-child { border-bottom:none; }
+.hp-dot { width:5px; height:5px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:8px; }
+.hp-h { font-family:var(--disp); font-size:16px; color:var(--ink); line-height:1.1; }
+.hp-h em { font-style:italic; color:var(--gold); }
+.hp-d { font-size:12px; color:var(--ink3); margin-top:3px; line-height:1.5; font-family:var(--mono); }
+.hero-band { display:flex; align-items:center; gap:10px; border:1px solid var(--rule); padding:10px 16px; margin-top:16px; background:var(--gold-t); }
+.pulse-dot { width:8px; height:8px; border-radius:50%; background:var(--green); flex-shrink:0; animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.hero-band-txt { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); }
+.hero-band-sub { font-family:var(--mono); font-size:10px; color:var(--ink3); margin-left:auto; }
+@media(max-width:800px){ #hero { grid-template-columns:1fr; } }
+
+/* PROBLEM */
+#problem { max-width:1200px; margin:0 auto; }
+.two-col { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--rule); margin-top:28px; }
+.two-col-head { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; padding:10px 20px; border-bottom:1px solid var(--rule); }
+.col-today .two-col-head { color:var(--ink4); background:var(--bg2); }
+.col-ts .two-col-head { color:var(--gold); background:var(--gold-t); border-left:1px solid var(--rule); }
+.col-today { background:var(--bg); }
+.col-ts { border-left:1px solid var(--rule); background:var(--bg); }
+.two-col-item { display:flex; gap:14px; padding:14px 20px; border-bottom:1px solid var(--rule); }
+.two-col-item:last-child { border-bottom:none; }
+.ti-mark { font-family:var(--mono); font-size:13px; font-weight:600; flex-shrink:0; width:16px; padding-top:2px; }
+.col-today .ti-mark { color:var(--red); }
+.col-ts .ti-mark { color:var(--green); }
+.ti-h { font-size:14px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.ti-d { font-size:13px; color:var(--ink3); line-height:1.5; }
+.verdict-bar { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--rule); border-top:none; }
+.vb-c { padding:14px 20px; }
+.vb-c:first-child { background:rgba(160,50,30,.04); border-right:1px solid var(--rule); }
+.vb-c:last-child { background:var(--green-t); }
+.vb-v { font-family:var(--mono); font-size:22px; font-weight:500; line-height:1; margin-bottom:4px; }
+.vb-c:first-child .vb-v { color:var(--red); }
+.vb-c:last-child .vb-v { color:var(--green); }
+.vb-l { font-size:12px; color:var(--ink4); }
+@media(max-width:700px){ .two-col,.verdict-bar { grid-template-columns:1fr; } .col-ts { border-left:none; border-top:1px solid var(--rule); } }
+
+/* CATCH */
+#catch { background:var(--bg2); }
+#catch-inner { max-width:1200px; margin:0 auto; }
+.catch-grid { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--rule); margin-top:28px; }
+.catch-col { padding:22px 20px; border-right:1px solid var(--rule); }
+.catch-col:last-child { border-right:none; }
+.catch-col.fraud { background:var(--red-t); }
+.catch-col.profile { background:var(--gold-t); }
+.catch-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; margin-bottom:6px; }
+.catch-col.data .catch-lbl { color:var(--ink4); }
+.catch-col.fraud .catch-lbl { color:var(--red); }
+.catch-col.profile .catch-lbl { color:var(--gold); }
+.catch-q { font-family:var(--disp); font-size:18px; color:var(--ink); margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--rule); line-height:1.2; }
+.catch-items { display:flex; flex-direction:column; gap:9px; }
+.catch-item { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--ink3); line-height:1.5; }
+.ci-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:7px; }
+.catch-col.data .ci-dot { background:var(--ink4); }
+.catch-col.fraud .ci-dot { background:var(--red); }
+.catch-col.profile .ci-dot { background:var(--gold); }
+.catch-item strong { color:var(--ink2); }
+@media(max-width:700px){ .catch-grid { grid-template-columns:1fr; } .catch-col { border-right:none; border-bottom:1px solid var(--rule); } .catch-col:last-child { border-bottom:none; } }
+
+/* SCIENCE */
+#science { max-width:1200px; margin:0 auto; }
+.sci-grid { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--rule); margin-top:28px; }
+.sci-col { padding:26px 26px; }
+.sci-col.det { border-right:1px solid var(--rule); }
+.sci-col.ai { background:var(--gold-t); }
+.sci-col-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; margin-bottom:10px; }
+.det .sci-col-lbl { color:var(--ink4); }
+.ai .sci-col-lbl { color:var(--gold); }
+.sci-col-h { font-family:var(--disp); font-size:clamp(17px,2vw,22px); color:var(--ink); line-height:1.1; margin-bottom:10px; }
+.sci-col-h em { font-style:italic; color:var(--gold); }
+.sci-col-body { font-size:13px; color:var(--ink3); line-height:1.6; margin-bottom:14px; padding-bottom:14px; border-bottom:1px solid var(--rule); }
+.sci-col-body strong { color:var(--ink); }
+.sci-rows { display:flex; flex-direction:column; gap:8px; }
+.sci-row { display:flex; gap:10px; font-size:13px; color:var(--ink3); line-height:1.5; }
+.sr-dot { width:4px; height:4px; border-radius:50%; flex-shrink:0; margin-top:8px; }
+.det .sr-dot { background:var(--ink4); }
+.ai .sr-dot { background:var(--gold); }
+.sci-row strong { color:var(--ink2); }
+.conf-bar { display:flex; align-items:center; gap:10px; margin-top:16px; padding-top:16px; border-top:1px solid var(--rule); }
+.conf-lbl { font-family:var(--mono); font-size:9px; color:var(--gold); letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; }
+.conf-track { flex:1; height:3px; background:var(--rule); border-radius:2px; overflow:hidden; }
+.conf-fill { height:100%; background:linear-gradient(90deg,var(--gold),var(--gold2)); border-radius:2px; width:85%; }
+.conf-val { font-family:var(--mono); font-size:10px; font-weight:500; color:var(--gold); }
+.phil-bar { margin-top:12px; border:1px solid var(--rule); padding:14px 20px; display:flex; gap:20px; align-items:flex-start; flex-wrap:wrap; background:var(--bg2); }
+.phil-bar-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); white-space:nowrap; padding-top:3px; }
+.phil-bar-txt { font-size:13px; color:var(--ink3); margin-bottom:8px; }
+.phil-bar-txt strong { color:var(--ink); }
+.chips { display:flex; flex-wrap:wrap; gap:6px; }
+.chip { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; padding:4px 9px; border:1px solid var(--rule); color:var(--ink4); background:var(--bg); }
+@media(max-width:700px){ .sci-grid { grid-template-columns:1fr; } .sci-col.det { border-right:none; border-bottom:1px solid var(--rule); } }
+
+/* RRP */
+#rrp-inner { max-width:1200px; margin:0 auto; }
+.annex-row { display:grid; grid-template-columns:repeat(4,1fr); border:1px solid var(--rule); border-bottom:none; margin-top:28px; }
+.ann { padding:16px 18px; border-right:1px solid var(--rule); }
+.ann:last-child { border-right:none; }
+.ann-k { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+.ann-h { font-size:13px; font-weight:600; color:var(--ink); margin-bottom:3px; }
+.ann-d { font-size:12px; color:var(--ink3); line-height:1.5; }
+.rrp-sample-lbl { font-family:var(--mono); font-size:9px; color:var(--ink4); letter-spacing:.08em; text-transform:uppercase; padding:10px 20px; background:var(--bg2); border:1px solid var(--rule); border-top:none; }
+.rrp-sample { border:1px solid var(--rule); border-top:none; }
+.rrp-hdr { display:flex; justify-content:space-between; align-items:flex-start; padding:18px 20px; border-bottom:1px solid var(--rule); gap:20px; flex-wrap:wrap; background:var(--bg2); }
+.rrp-name { font-family:var(--disp); font-size:20px; color:var(--ink); }
+.rrp-meta { font-family:var(--mono); font-size:9px; color:var(--ink4); line-height:1.6; margin-top:3px; }
+.rrp-ids { font-family:var(--mono); font-size:9px; color:var(--ink4); text-align:right; line-height:1.6; }
+.rrp-score-bar { display:flex; align-items:center; gap:20px; padding:16px 20px; border-bottom:1px solid var(--rule); flex-wrap:wrap; }
+.score-n { font-family:var(--mono); font-size:36px; font-weight:500; color:var(--red); line-height:1; }
+.score-d { font-family:var(--mono); font-size:14px; color:var(--ink4); }
+.score-div { width:1px; height:40px; background:var(--rule); flex-shrink:0; }
+.score-band { font-family:var(--disp); font-size:18px; color:var(--red); }
+.score-status { font-size:12px; color:var(--ink3); margin-top:2px; }
+.score-tags { display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; }
+.stag { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; padding:4px 9px; }
+.stag-rej { background:var(--red-t); color:var(--red); border:1px solid var(--red-b); }
+.stag-sec { background:var(--bg2); color:var(--ink3); border:1px solid var(--rule); }
+.rrp-body { padding:18px 20px; border-bottom:1px solid var(--rule); }
+.rrp-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px 16px; margin-bottom:14px; }
+.rg-k { font-family:var(--mono); font-size:9px; color:var(--ink4); letter-spacing:.06em; margin-bottom:2px; text-transform:uppercase; }
+.rg-v { font-size:13px; color:var(--ink); font-weight:500; }
+.rrp-narr { font-size:13px; color:var(--ink3); line-height:1.7; padding-top:14px; border-top:1px solid var(--rule); }
+.rrp-narr strong { color:var(--ink); }
+.rrp-ratf { display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--rule); }
+.rr-col { padding:18px 20px; }
+.rr-col:first-child { border-right:1px solid var(--rule); }
+.rr-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--ink4); margin-bottom:12px; }
+.ratf-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.rtr-name { font-size:12px; color:var(--ink); font-weight:500; }
+.rtr-w { font-family:var(--mono); font-size:9px; color:var(--ink4); }
+.rtr-bar { flex:1; height:4px; background:var(--bg2); border-radius:2px; overflow:hidden; }
+.rtr-fill { height:100%; border-radius:2px; }
+.fill-p { background:var(--green); }
+.fill-f { background:var(--red); }
+.rtr-val { display:flex; align-items:center; gap:5px; }
+.rv-p { font-family:var(--mono); font-size:11px; color:var(--green); }
+.rv-f { font-family:var(--mono); font-size:11px; color:var(--red); }
+.rtag { font-family:var(--mono); font-size:8px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; }
+.rtag-p { background:var(--green-t); color:var(--green); }
+.rtag-f { background:var(--red-t); color:var(--red); }
+.chk-row { display:flex; align-items:center; gap:10px; margin-top:10px; padding-top:10px; border-top:1px solid var(--rule); }
+.chk-bar { flex:1; height:5px; border-radius:2px; overflow:hidden; display:flex; }
+.chk-p { background:var(--green); }
+.chk-f { background:var(--red); }
+.chk-txt { font-family:var(--mono); font-size:10px; color:var(--ink3); white-space:nowrap; }
+.flags-list { display:flex; flex-direction:column; gap:10px; }
+.flag { display:flex; gap:12px; padding:10px 0; border-bottom:1px solid var(--rule); }
+.flag:last-child { border-bottom:none; }
+.fpill { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.08em; padding:3px 7px; flex-shrink:0; align-self:flex-start; margin-top:1px; }
+.pill-p0 { background:var(--red-t); color:var(--red); border:1px solid var(--red-b); }
+.pill-p1 { background:var(--amb-t); color:var(--amb); border:1px solid var(--amb-b); }
+.flag-h { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.flag-d { font-size:12px; color:var(--ink3); line-height:1.5; }
+@media(max-width:700px){ .annex-row { grid-template-columns:1fr 1fr; } .rrp-grid { grid-template-columns:repeat(2,1fr); } .rrp-ratf { grid-template-columns:1fr; } .rr-col:first-child { border-right:none; border-bottom:1px solid var(--rule); } }
+
+/* CAM BRIDGE */
+#cambridge { background:var(--bg2); }
+#cambridge-inner { max-width:1200px; margin:0 auto; }
+.cam-header { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--rule); margin-top:28px; }
+.cam-hc { padding:20px 22px; }
+.cam-hc:first-child { border-right:1px solid var(--rule); background:var(--bg); }
+.cam-hc:last-child { background:var(--gold-t); }
+.cam-hc-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; }
+.cam-hc:first-child .cam-hc-lbl { color:var(--green); }
+.cam-hc:last-child .cam-hc-lbl { color:var(--ink4); }
+.cam-hc-h { font-family:var(--disp); font-size:18px; color:var(--ink); line-height:1.2; margin-bottom:8px; }
+.cam-hc-h em { font-style:italic; color:var(--gold); }
+.cam-hc-items { display:flex; flex-direction:column; gap:5px; font-size:12px; color:var(--ink3); }
+.cam-steps { border:1px solid var(--rule); border-top:none; display:grid; grid-template-columns:repeat(4,1fr); }
+.cam-step { padding:16px 18px; border-right:1px solid var(--rule); }
+.cam-step:last-child { border-right:none; background:var(--bg2); }
+.cam-step-t { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+.cam-step-d { font-size:12px; color:var(--ink3); line-height:1.6; }
+.cam-result { border:1px solid var(--rule); border-top:none; padding:14px 20px; background:var(--ink); display:flex; align-items:center; gap:20px; }
+.cam-result-v { font-family:var(--mono); font-size:18px; font-weight:500; color:var(--gold); }
+.cam-result-sub { font-size:13px; color:rgba(255,255,255,.45); }
+@media(max-width:700px){ .cam-header { grid-template-columns:1fr; } .cam-hc:first-child { border-right:none; border-bottom:1px solid var(--rule); } .cam-steps { grid-template-columns:1fr 1fr; } }
+
+/* IMPACT */
+#impact { }
+#impact-inner { max-width:1200px; margin:0 auto; }
+.impact-grid { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--rule); margin-top:28px; }
+.impact-c { padding:26px 22px; border-right:1px solid var(--rule); }
+.impact-c:last-child { border-right:none; }
+.impact-n { font-family:var(--mono); font-size:clamp(28px,3.5vw,42px); font-weight:500; color:var(--ink); line-height:1; margin-bottom:6px; }
+.impact-n em { font-style:normal; font-size:16px; color:var(--gold); vertical-align:super; }
+.impact-h { font-size:14px; font-weight:600; color:var(--ink); margin-bottom:7px; line-height:1.25; }
+.impact-d { font-size:12px; color:var(--ink3); line-height:1.65; }
+@media(max-width:700px){ .impact-grid { grid-template-columns:1fr; } .impact-c { border-right:none; border-bottom:1px solid var(--rule); } .impact-c:last-child { border-bottom:none; } }
+
+/* DEMO */
+#demo { background:var(--ink); }
+#demo-inner { max-width:1200px; margin:0 auto; padding:clamp(64px,8vw,108px) clamp(20px,5vw,80px); }
+#demo .label { color:var(--gold); }
+#demo h2 { color:#fff; }
+#demo h2 em { color:var(--gold); }
+#demo .lead { color:rgba(255,255,255,.45); margin-bottom:28px; max-width:560px; }
+.demo-live { display:flex; align-items:center; gap:10px; margin-bottom:24px; }
+.demo-live span { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); }
+.entity-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-bottom:8px; }
+.entity-grid-row2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-bottom:24px; }
+.entity-tile { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); padding:14px 16px; cursor:pointer; transition:border-color .15s,background .15s; position:relative; }
+.entity-tile:hover { border-color:rgba(200,146,42,.4); background:rgba(200,146,42,.04); }
+.entity-tile.active { border-color:var(--gold); background:rgba(200,146,42,.06); }
+.entity-tile.active::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--gold); }
+.et-id { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.12em; color:rgba(255,255,255,.3); margin-bottom:6px; }
+.et-scenario { font-family:var(--disp); font-size:15px; color:#fff; line-height:1.15; margin-bottom:8px; }
+.et-score { font-family:var(--mono); font-size:11px; margin-bottom:5px; }
+.et-badge { display:inline-block; font-family:var(--mono); font-size:8px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; padding:3px 8px; }
+.badge-approve { background:rgba(64,145,108,.15); color:#5dca93; border:1px solid rgba(64,145,108,.3); }
+.badge-review  { background:rgba(200,146,42,.12); color:var(--gold2); border:1px solid rgba(200,146,42,.25); }
+.badge-reject  { background:rgba(163,45,45,.15); color:#e07070; border:1px solid rgba(163,45,45,.3); }
+.et-desc { font-size:11px; color:rgba(255,255,255,.32); line-height:1.5; margin-top:6px; font-family:var(--mono); }
+/* result panel */
+.result-panel { border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); margin-bottom:12px; display:none; }
+.result-panel.visible { display:block; }
+.rp-head { display:flex; align-items:flex-start; justify-content:space-between; padding:18px 22px; border-bottom:1px solid rgba(255,255,255,.08); flex-wrap:wrap; gap:14px; }
+.rp-entity-name { font-family:var(--disp); font-size:20px; color:#fff; }
+.rp-entity-meta { font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.3); margin-top:3px; line-height:1.6; }
+.rp-score-block { text-align:right; }
+.rp-score-num { font-family:var(--mono); font-size:34px; font-weight:500; line-height:1; }
+.rp-score-label { font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.3); margin-top:2px; }
+.rp-body { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid rgba(255,255,255,.08); }
+.rp-ratf { padding:18px 22px; border-right:1px solid rgba(255,255,255,.08); }
+.rp-flags-col { padding:18px 22px; }
+.rp-col-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-bottom:12px; }
+.rp-bar-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+.rp-bar-name { font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.55); width:80px; flex-shrink:0; }
+.rp-bar-track { flex:1; height:4px; background:rgba(255,255,255,.08); border-radius:2px; overflow:hidden; }
+.rp-bar-fill { height:100%; border-radius:2px; }
+.rp-bar-val { font-family:var(--mono); font-size:10px; width:32px; text-align:right; flex-shrink:0; }
+.rp-flag { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid rgba(255,255,255,.06); }
+.rp-flag:last-child { border-bottom:none; }
+.rp-fpill { font-family:var(--mono); font-size:8px; font-weight:500; letter-spacing:.08em; padding:3px 6px; flex-shrink:0; align-self:flex-start; margin-top:1px; }
+.rp-pill-p0 { background:rgba(163,45,45,.25); color:#e07070; border:1px solid rgba(163,45,45,.35); }
+.rp-pill-p1 { background:rgba(133,79,11,.25); color:var(--gold2); border:1px solid rgba(133,79,11,.35); }
+.rp-flag-h { font-size:12px; color:#fff; margin-bottom:2px; font-weight:500; }
+.rp-flag-d { font-size:11px; color:rgba(255,255,255,.35); line-height:1.5; font-family:var(--mono); }
+.rp-no-flags { font-size:12px; color:rgba(64,145,108,.8); font-family:var(--mono); padding:8px 0; }
+.rp-narr { padding:14px 22px; font-size:13px; color:rgba(255,255,255,.45); line-height:1.7; border-bottom:1px solid rgba(255,255,255,.08); }
+.rp-narr strong { color:rgba(255,255,255,.8); }
+.rp-actions { padding:14px 22px; display:flex; align-items:center; gap:14px; }
+.rp-open-btn { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:var(--gold); color:var(--ink); padding:10px 20px; cursor:pointer; border:none; text-decoration:none; display:inline-block; transition:opacity .15s; }
+.rp-open-btn:hover { opacity:.88; }
+.rp-open-note { font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.25); line-height:1.5; }
+/* iframe reveal */
+.demo-frame-wrap { border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.02); overflow:hidden; display:none; margin-bottom:0; }
+.demo-frame-wrap.visible { display:block; }
+.demo-frame-wrap iframe { width:100%; height:700px; border:none; display:block; }
+.demo-ctx { display:grid; grid-template-columns:repeat(3,1fr); border:1px solid rgba(255,255,255,.08); border-top:none; }
+.demo-ctx-c { padding:14px 18px; border-right:1px solid rgba(255,255,255,.08); }
+.demo-ctx-c:last-child { border-right:none; }
+.demo-ctx-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+.demo-ctx-txt { font-size:12px; color:rgba(255,255,255,.4); line-height:1.6; }
+@media(max-width:800px){ .entity-grid { grid-template-columns:repeat(2,1fr); } .entity-grid-row2 { grid-template-columns:repeat(2,1fr); } .rp-body { grid-template-columns:1fr; } .rp-ratf { border-right:none; border-bottom:1px solid rgba(255,255,255,.08); } }
+@media(max-width:500px){ .entity-grid,.entity-grid-row2 { grid-template-columns:1fr; } .demo-ctx { grid-template-columns:1fr; } .demo-ctx-c { border-right:none; border-bottom:1px solid rgba(255,255,255,.08); } .demo-frame-wrap iframe { height:520px; } }
+
+/* CLOSE */
+#close { background:var(--ink); border-top:1px solid rgba(255,255,255,.06); }
+#close-inner { max-width:1200px; margin:0 auto; padding:clamp(56px,7vw,100px) clamp(20px,5vw,80px); }
+#close .label { color:var(--gold); }
+#close h2 { color:#fff; }
+#close h2 em { color:var(--gold); }
+.close-founder-note { font-size:13px; color:rgba(255,255,255,.35); line-height:1.75; margin-bottom:24px; font-style:italic; max-width:600px; border-left:2px solid rgba(200,146,42,.3); padding-left:16px; }
+.close-cta-box { border:1px solid rgba(200,146,42,.3); background:rgba(200,146,42,.05); padding:26px 26px; margin:24px 0; }
+.close-cta-h { font-family:var(--disp); font-size:clamp(19px,2.3vw,26px); font-weight:400; color:#fff; margin-bottom:10px; line-height:1.15; }
+.close-cta-h em { font-style:italic; color:var(--gold); }
+.close-cta-d { font-size:14px; color:rgba(255,255,255,.5); line-height:1.65; margin-bottom:20px; max-width:540px; }
+.cta-actions { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.cta-primary { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.1em; text-transform:uppercase; background:var(--gold); color:var(--ink); padding:13px 26px; text-decoration:none; transition:opacity .15s; display:inline-block; }
+.cta-primary:hover { opacity:.88; }
+.cta-secondary { font-family:var(--mono); font-size:10px; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.4); text-decoration:none; border-bottom:1px solid rgba(255,255,255,.15); padding-bottom:2px; }
+.cta-secondary:hover { color:rgba(255,255,255,.65); }
+.pilot-steps { border:1px solid rgba(200,146,42,.2); background:rgba(200,146,42,.04); padding:22px 24px; margin:28px 0; }
+.pilot-steps-lbl { font-family:var(--mono); font-size:9px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
+.pilot-step { display:flex; gap:16px; margin-bottom:12px; }
+.pilot-step:last-child { margin-bottom:0; }
+.ps-n { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--gold); flex-shrink:0; width:22px; padding-top:2px; }
+.ps-b { font-size:14px; color:rgba(255,255,255,.65); line-height:1.5; }
+.ps-b strong { color:#fff; }
+.close-contact { margin-top:20px; font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.28); letter-spacing:.06em; }
+.close-contact strong { color:var(--gold); }
+.close-contact a { color:rgba(255,255,255,.35); text-decoration:none; }
+.close-contact a:hover { color:rgba(255,255,255,.6); }
+</style>
+</head>
+<body>
+
+<!-- FLOAT BUTTONS -->
+<div style="position:fixed;bottom:24px;right:24px;z-index:800;display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+  <a href="#close" style="display:flex;align-items:center;gap:8px;padding:11px 22px;border-radius:2px;background:var(--gold);color:var(--ink);font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,.2);">Schedule a call</a>
+  <a href="https://psbx.onrender.com/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:2px;background:rgba(250,249,246,.95);color:var(--ink);font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;border:1px solid var(--rule);box-shadow:0 4px 20px rgba(0,0,0,.12);"><span style="width:6px;height:6px;border-radius:50%;background:#40916c;display:inline-block;animation:pulse 2s infinite;"></span>See prototype</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Truth<span>Stack</span></div>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#science">Science</a></li>
+    <li><a href="#rrp">RRP</a></li>
+    <li><a href="#cambridge">CAM Bridge</a></li>
+    <li><a href="#demo">Demo</a></li>
+  </ul>
+  <a class="nav-cta" href="#close">Schedule a call</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <span class="label">Verification Infrastructure · MSME Lending · Upstream of Loan Origination</span>
+    <h1>Every application verified.<br><em>Every credit desk ready to act.</em></h1>
+    <p class="lead">TruthStack reads GST returns, bank statements, and invoices simultaneously — surfacing contradictions, fraud signals, and credit intelligence that sequential checks cannot see. The output is a forensic Risk Ready Packet your analysts open, not assemble.</p>
+    <p class="mono-note">Complements your LOS · Replaces no existing tool · Pilot-ready in 2 weeks</p>
+  </div>
+  <div class="hero-right">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);">
+      <div class="hero-stat" style="border-right:1px solid var(--rule);">
+        <div class="hero-stat-v">&lt;2 min</div>
+        <div class="hero-stat-l">Risk Ready Packet — delivered</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-v">79 + 13</div>
+        <div class="hero-stat-l">Deterministic + AI checks</div>
+      </div>
+    </div>
+    <div class="hero-pillars">
+      <div class="hero-pillar">
+        <div class="hp-dot"></div>
+        <div>
+          <div class="hp-h">Lendable <em>Truth</em></div>
+          <div class="hp-d">Every data point cross-verified before it reaches credit. The packet confirms the file is safe to lend against — or tells you exactly why it isn't.</div>
+        </div>
+      </div>
+      <div class="hero-pillar">
+        <div class="hp-dot"></div>
+        <div>
+          <div class="hp-h"><em>Speed</em> — analyst judgment, not data assembly</div>
+          <div class="hp-d">RRP in under 2 minutes. 8× analyst throughput. Clean files same-day sanction eligible.</div>
+        </div>
+      </div>
+      <div class="hero-pillar">
+        <div class="hp-dot"></div>
+        <div>
+          <div class="hp-h">Sovereign by <em>Design</em></div>
+          <div class="hp-d">Runs inside your VPC. Stateless. No borrower data leaves your infrastructure — ever. RBI data localisation compliant from day one.</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-band">
+      <div class="pulse-dot"></div>
+      <div class="hero-band-txt">Prototype · Engine Live</div>
+      <div class="hero-band-sub">Real engine · pre-loaded cases · real RRP</div>
+    </div>
+  </div>
+</section>
+
+<div class="rule-line"></div>
+
+<!-- PROBLEM -->
+<section>
+<div id="problem">
+  <span class="label">The Verification Gap</span>
+  <h2>Bureau checks identity.<br><em>Nobody verifies the file.</em></h2>
+  <p class="lead">Duplicate invoices, GST fabrication, and circular trading all pass bureau and KYC. They only surface when three sources are read simultaneously — which no existing tool does today.</p>
+  <div class="two-col">
+    <div class="col-today">
+      <div class="two-col-head">Today — sequential, siloed</div>
+      <div class="two-col-item"><div class="ti-mark">✕</div><div><div class="ti-h">Files checked one source at a time</div><div class="ti-d">GST reconciled separately. Bank statements reviewed separately. Invoice checked separately. Contradictions between sources are invisible.</div></div></div>
+      <div class="two-col-item"><div class="ti-mark">✕</div><div><div class="ti-h">8–12 hours of analyst data assembly</div><div class="ti-d">Every credit officer spends most of the day collecting, normalising, and reconciling data — before a single line of credit judgment is written.</div></div></div>
+      <div class="two-col-item"><div class="ti-mark">✕</div><div><div class="ti-h">Fraud caught post-disbursal, not before</div><div class="ti-d">Duplicate invoice financing and circular trading are detectable. They're just not being detected — because the check requires reading all three sources at once.</div></div></div>
+    </div>
+    <div class="col-ts">
+      <div class="two-col-head">TruthStack — forensic, simultaneous</div>
+      <div class="two-col-item"><div class="ti-mark">✓</div><div><div class="ti-h">All three sources read in a single pass</div><div class="ti-d">GST returns, bank statements, and invoices reconciled together. Contradictions surface. Evidence chain confirmed. Every data point traced to its originating source.</div></div></div>
+      <div class="two-col-item"><div class="ti-mark">✓</div><div><div class="ti-h">RRP delivered in under 2 minutes</div><div class="ti-d">Credit officers open a decision-ready file — not a data assembly task. CAM Bridge pre-fills the CAM with verified numbers. 45 minutes to judgment, not 8 hours.</div></div></div>
+      <div class="two-col-item"><div class="ti-mark">✓</div><div><div class="ti-h">Fraud intercepted at origination</div><div class="ti-d">P0 flags auto-reject before any commitment is made. Every duplicate invoice fingerprint logged. Circular trading detected by the network layer — not post-disbursal.</div></div></div>
+    </div>
+  </div>
+  <div class="verdict-bar">
+    <div class="vb-c"><div class="vb-v">3–5%</div><div class="vb-l">MSME application fabrication rate — industry estimate. Undetected with sequential checks.</div></div>
+    <div class="vb-c"><div class="vb-v">P0 → 0</div><div class="vb-l">Fraud-originated NPAs intercepted at origination with simultaneous cross-source verification.</div></div>
+  </div>
+</div>
+</section>
+
+<div class="rule-line"></div>
+
+<!-- WHAT WE CATCH -->
+<section id="catch">
+<div id="catch-inner">
+  <span class="label">What We Catch</span>
+  <h2>What an analyst finds in 4–8 hours.<br><em>Surfaced in 2 minutes.</em></h2>
+  <p class="lead">The signals that pass individual checks — only visible when all three sources are read simultaneously.</p>
+  <div class="catch-grid">
+    <div class="catch-col data">
+      <div class="catch-lbl">Data Integrity</div>
+      <div class="catch-q">Does the data add up?</div>
+      <div class="catch-items">
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>GST vs bank credits</strong> — GSTR-3B declared ≠ 12-month actuals</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>GSTR-1 suppression</strong> — outward supply declared but not reported</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Invoice ↔ GST ↔ bank</strong> — HSN codes, taxable value, payment reference</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Document staleness</strong> — ITR and financials beyond acceptable age</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Broken evidence chain</strong> — data point untraceable to originating source</div></div>
+      </div>
+    </div>
+    <div class="catch-col fraud">
+      <div class="catch-lbl">Fraud</div>
+      <div class="catch-q">Is this genuine?</div>
+      <div class="catch-items">
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Duplicate invoice</strong> — same invoice at multiple lenders. P0 auto-reject.</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Invoice fabrication</strong> — font anomalies, metadata tampering, template reuse</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Circular transactions</strong> — funds returned through layered transfers A→B→C→A</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>GSTIN / promoter flags</strong> — cancelled GSTIN, RBI defaulter, MCA strike-off</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Shell company network</strong> — director-linked shell entities, shared bank accounts</div></div>
+      </div>
+    </div>
+    <div class="catch-col profile">
+      <div class="catch-lbl">Credit Profile</div>
+      <div class="catch-q">Does the case hold?</div>
+      <div class="catch-items">
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>DSCR vs bank actuals</strong> — stated financials vs 12-month cash flows</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Single-buyer concentration</strong> — 100% receivables, no verified payment history</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Pre-application spike</strong> — volume surge 2–3 months before submission</div></div>
+        <div class="catch-item"><div class="ci-dot"></div><div><strong>Profile incoherence</strong> — repayment unmodellable when sources conflict</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="border:1px solid var(--rule);border-top:none;padding:13px 20px;background:var(--bg);font-size:13px;color:var(--ink3);line-height:1.6;">
+    Rules catch reconciliation failures. <strong style="color:var(--ink);">Governed AI catches fabrication and behavioural fraud. Both layers run on every file.</strong>
+  </div>
+</div>
+</section>
+
+<div class="rule-line"></div>
+
+<!-- SCIENCE -->
+<section>
+<div id="science">
+  <span class="label">Verification Science</span>
+  <h2>Deterministic rules.<br><em>Governed AI. One verdict.</em></h2>
+  <div class="sci-grid">
+    <div class="sci-col det">
+      <div class="sci-col-lbl">Layer 1 · Deterministic RATF</div>
+      <div class="sci-col-h">Rules that <em>never negotiate.</em></div>
+      <div class="sci-col-body">79 binary checks — pass or fail, severity-graded. Critical failures auto-reject. <strong>No inference. No override.</strong></div>
+      <div class="sci-rows">
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Recency</strong> — document freshness scored. Stale evidence flagged.</div></div>
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Accuracy</strong> — 15 cross-source checkpoints: GST ↔ Bank ↔ Invoice.</div></div>
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Traceability</strong> — every data point traced to originating source.</div></div>
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Fraud</strong> — 50 checks across document, behaviour, and network signals.</div></div>
+      </div>
+    </div>
+    <div class="sci-col ai">
+      <div class="sci-col-lbl">Layer 2 · Governed AI Advisory</div>
+      <div class="sci-col-h">Sees what rules<br><em>cannot structurally see.</em></div>
+      <div class="sci-col-body">Four AI models, purpose-built for Indian MSME. Flags surface only above <strong>85% confidence.</strong> Advisory only — rules decide.</div>
+      <div class="sci-rows">
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Document Forensics</strong> — invoice tampering, font anomalies, metadata manipulation</div></div>
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Behavioural Anomalies</strong> — velocity spikes, round-number clustering, inflation patterns</div></div>
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Predictive Risk</strong> — default probability, DSO deterioration, repayment coherence</div></div>
+        <div class="sci-row"><div class="sr-dot"></div><div><strong>Network Intelligence</strong> — buyer cluster risk, consortium fraud graph, shell linkages</div></div>
+      </div>
+      <div class="conf-bar">
+        <div class="conf-lbl">Confidence gate</div>
+        <div class="conf-track"><div class="conf-fill"></div></div>
+        <div class="conf-val">≥85% to surface</div>
+      </div>
+    </div>
+  </div>
+  <div class="phil-bar">
+    <div class="phil-bar-lbl">Philosophy</div>
+    <div>
+      <div class="phil-bar-txt"><strong>Rules decide. AI advises. Humans judge.</strong> 2–4 consolidated, evidence-graded flags — not 50 raw outputs.</div>
+      <div class="chips">
+        <span class="chip">E1 / E2 / E3 Evidence Grading</span>
+        <span class="chip">P0–P3 Severity Routing</span>
+        <span class="chip">DQS Corroboration Multiplier</span>
+        <span class="chip">RBI · CVC · DPDP Compliant</span>
+        <span class="chip">Configurable Per Lender</span>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="rule-line"></div>
+
+<!-- RRP -->
+<section id="rrp">
+<div id="rrp-inner">
+  <span class="label">The Output — Lendable Truth</span>
+  <h2>The Risk Ready Packet.<br><em>Not a score. A forensic verdict.</em></h2>
+  <p class="lead">Four annexed reports. Every check evidence-graded: document source, what was examined, what the engine found. Delivered in under 2 minutes.</p>
+  <div class="annex-row">
+    <div class="ann"><div class="ann-k">Annex A</div><div class="ann-h">RATF Analysis</div><div class="ann-d">79 deterministic checks · source grade · full audit log</div></div>
+    <div class="ann"><div class="ann-k">Annex B</div><div class="ann-h">AI Advisory Report</div><div class="ann-d">≥85% confidence flags · corroboration status · shadow mode</div></div>
+    <div class="ann"><div class="ann-k">Annex C</div><div class="ann-h">Credit Intelligence Summary</div><div class="ann-d">9-section CIS · verified ratios · CAM-structured data</div></div>
+    <div class="ann"><div class="ann-k">Annex D</div><div class="ann-h">Normalised Raw Data</div><div class="ann-d">Source-tagged · LOS-ready · every field traceable to originating document</div></div>
+  </div>
+  <div class="rrp-sample-lbl">Reference Sample · Delta Distributors Co · Invoice Factoring · RED Band · TruthScore 39.6/100</div>
+  <div class="rrp-sample">
+    <div class="rrp-hdr">
+      <div>
+        <div class="rrp-name">Delta Distributors Co</div>
+        <div class="rrp-meta">GSTIN 27AADCD1234F1ZX · PAN AADCD1234F · FMCG Distribution · Maharashtra · Buyer: RetailMart India Pvt Ltd</div>
+      </div>
+      <div class="rrp-ids">RRP d4f7a291-88c · 1 Apr 2026<br>App 22222222-222 · Valid 30 days</div>
+    </div>
+    <div class="rrp-score-bar">
+      <div><div style="display:flex;align-items:flex-end;gap:3px;"><span class="score-n">39.6</span><span class="score-d">/100</span></div></div>
+      <div class="score-div"></div>
+      <div><div class="score-band">Red band</div><div class="score-status">Critical integrity failures — credit decision blocked pending resolution</div></div>
+      <div class="score-tags"><span class="stag stag-rej">Auto reject</span><span class="stag stag-sec">P0 ×2 · P1 ×2</span></div>
+    </div>
+    <div class="rrp-body">
+      <div style="font-family:var(--mono);font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--ink4);margin-bottom:8px;">Invoice Factoring · ₹42,00,000 · Buyer: RetailMart India Pvt Ltd</div>
+      <div class="rrp-grid">
+        <div><div class="rg-k">Entity</div><div class="rg-v">Pvt · FMCG distribution</div></div>
+        <div><div class="rg-k">Vintage</div><div class="rg-v">6 years · active GSTIN</div></div>
+        <div><div class="rg-k">CIBIL</div><div class="rg-v" style="color:var(--green);">712 · 0 DPD</div></div>
+        <div><div class="rg-k">DSCR</div><div class="rg-v">1.28x — meets floor</div></div>
+        <div><div class="rg-k">EBITDA</div><div class="rg-v" style="color:var(--amb);">3.8% — thin</div></div>
+        <div><div class="rg-k">GST ↔ Bank</div><div class="rg-v" style="color:var(--red);">62% variance</div></div>
+        <div><div class="rg-k">Net profit</div><div class="rg-v">₹12,40,000</div></div>
+        <div><div class="rg-k">D/E</div><div class="rg-v">2.4</div></div>
+      </div>
+      <div class="rrp-narr">Bureau clean. DSCR passes floor. Would clear a standard pre-screen. Cross-source read surfaces: duplicate invoice submitted to two lenders simultaneously (P0 · hard stop), pre-application GST spike 3× normal run-rate (P0 · fabrication signal), GST-bank variance 62% against 5% tolerance. <strong>Lendable Truth: not this file.</strong></div>
+    </div>
+    <div class="rrp-ratf">
+      <div class="rr-col">
+        <div class="rr-lbl">RATF · R20 A40 T25 F15</div>
+        <div class="ratf-row"><div><div class="rtr-name">Recency</div><div class="rtr-w">20%</div></div><div class="rtr-bar"><div class="rtr-fill fill-p" style="width:91%"></div></div><div class="rtr-val"><span class="rv-p">91.0</span><span class="rtag rtag-p">Pass</span></div></div>
+        <div class="ratf-row"><div><div class="rtr-name">Accuracy</div><div class="rtr-w">40% ★</div></div><div class="rtr-bar"><div class="rtr-fill fill-f" style="width:38%"></div></div><div class="rtr-val"><span class="rv-f">38.2</span><span class="rtag rtag-f">Fail</span></div></div>
+        <div class="ratf-row"><div><div class="rtr-name">Traceability</div><div class="rtr-w">25%</div></div><div class="rtr-bar"><div class="rtr-fill fill-f" style="width:44%"></div></div><div class="rtr-val"><span class="rv-f">44.1</span><span class="rtag rtag-f">Fail</span></div></div>
+        <div class="ratf-row"><div><div class="rtr-name">Fraud</div><div class="rtr-w">15%</div></div><div class="rtr-bar"><div class="rtr-fill fill-f" style="width:22%"></div></div><div class="rtr-val"><span class="rv-f">22.0</span><span class="rtag rtag-f">High</span></div></div>
+        <div class="chk-row"><div class="chk-bar"><div class="chk-p" style="width:54%"></div><div class="chk-f" style="width:46%"></div></div><span class="chk-txt"><span style="color:var(--green);font-weight:500;">43</span> passed &nbsp;<span style="color:var(--red);font-weight:500;">36</span> failed of 79</span></div>
+        <div style="font-size:10px;color:var(--ink4);margin-top:4px;">Evidence confidence 87.1% · 13 AI advisory checks</div>
+      </div>
+      <div class="rr-col">
+        <div class="rr-lbl">Active Flags · Smart Flagging</div>
+        <div class="flags-list">
+          <div class="flag flag-p0"><span class="fpill pill-p0">P0</span><div><div class="flag-h">Duplicate invoice — submitted to 2 lenders simultaneously</div><div class="flag-d">Hard stop · consortium clearance required before any commitment</div></div></div>
+          <div class="flag flag-p0"><span class="fpill pill-p0">P0</span><div><div class="flag-h">Pre-application GST spike — 3× run-rate in 60 days prior</div><div class="flag-d">Fabrication signal · escalate to senior credit immediately</div></div></div>
+          <div class="flag flag-p1"><span class="fpill pill-p1">P1</span><div><div class="flag-h">GST ↔ Bank variance 62% (tolerance 5%)</div><div class="flag-d">Reconciliation statement and bank manager confirmation required</div></div></div>
+          <div class="flag flag-p1"><span class="fpill pill-p1">P1</span><div><div class="flag-h">Single-buyer concentration — 100% receivables, RetailMart India</div><div class="flag-d">Verify 12-month payment history independently before any exposure</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="rule-line"></div>
+
+<!-- CAM BRIDGE -->
+<section id="cambridge">
+<div id="cambridge-inner">
+  <span class="label">CAM Bridge</span>
+  <h2>The analyst's CAM, pre-filled.<br><em>Credit judgment stays theirs.</em></h2>
+  <p class="lead">Every verified number from the RRP placed directly into the Credit Appraisal Memorandum — in the right section, with the right flag, in the right format for your lender's template.</p>
+  <div class="cam-header">
+    <div class="cam-hc">
+      <div class="cam-hc-lbl">What TruthStack populates</div>
+      <div class="cam-hc-h">Financial summary, banking conduct, dedupe &amp; <em>hygiene — verified and placed.</em></div>
+      <div class="cam-hc-items">
+        <div>P&L table · all ratios · WC days · GST-bank reconciliation</div>
+        <div>OCS inputs: EBITDA%, leverage, ICR, bounce rate, revenue</div>
+        <div>Bank conduct: cheque bounces, CC utilisation, NACH success</div>
+        <div>Dedupe: CIBIL commercial + consumer, PEP, NCLT, duplicate financing</div>
+      </div>
+    </div>
+    <div class="cam-hc">
+      <div class="cam-hc-lbl">What always stays with the analyst</div>
+      <div class="cam-hc-h">Credit story. <em>Business judgment. Recommendation.</em></div>
+      <div class="cam-hc-items">
+        <div>Promoter narrative and relationship context</div>
+        <div>Credit recommendation and proposed limit</div>
+        <div>Security structure and approving authority comments</div>
+        <div>Any judgment that requires knowing the borrower, not just the file</div>
+      </div>
+    </div>
+  </div>
+  <div class="cam-steps">
+    <div class="cam-step"><div class="cam-step-t">Reads</div><div class="cam-step-d">RRP outputs — verified financials, ratios, bureau data, compliance checks — every number source-tagged.</div></div>
+    <div class="cam-step"><div class="cam-step-t">Formats</div><div class="cam-step-d">Maps each verified field to the corresponding CAM section and cell in your lender's template.</div></div>
+    <div class="cam-step"><div class="cam-step-t">Flags</div><div class="cam-step-d">Surface inline, in the CAM section they belong to — not a separate list to reconcile. P0 fields are visually blocked.</div></div>
+    <div class="cam-step"><div class="cam-step-t">Never</div><div class="cam-step-d">Credit recommendation, pricing, security, approving authority — entirely analyst and committee. TruthStack does not touch this.</div></div>
+  </div>
+  <div class="cam-result">
+    <div class="cam-result-v">~45 min analyst time</div>
+    <div class="cam-result-sub">Credit judgment. Not data assembly.</div>
+  </div>
+  <div class="anchor-ref">Together RRP and CAM Bridge move the analyst from <strong>eight hours of assembly</strong> to forty-five minutes of <strong>judgment</strong>.</div>
+</div>
+</section>
+
+<div class="rule-line"></div>
+
+<!-- IMPACT -->
+<section id="impact">
+<div id="impact-inner">
+  <span class="label">The Business Case</span>
+  <h2>Three numbers for<br><em>a credit committee.</em></h2>
+  <div class="impact-grid">
+    <div class="impact-c">
+      <div class="impact-n">8×<em>+</em></div>
+      <div class="impact-h">More files per analyst, per day</div>
+      <div class="impact-d">Manual verification: 8–12 hours of data collection, reconciliation, and CAM population per file. With TruthStack pre-done, the analyst reviews a verified RRP and exercises judgment — 45 minutes, not a full day.</div>
+    </div>
+    <div class="impact-c" style="background:var(--bg2);">
+      <div class="impact-n">P0<em>→0</em></div>
+      <div class="impact-h">Fraud-originated NPAs intercepted at origination</div>
+      <div class="impact-d">Duplicate invoice financing, circular trading, pre-application GST fabrication — detectable at origination if all three sources are read simultaneously. Industry fabrication rate: 3–5% of MSME applications.</div>
+    </div>
+    <div class="impact-c">
+      <div class="impact-n">2<em>min</em></div>
+      <div class="impact-h">Time-to-decision on clean files — from days to minutes</div>
+      <div class="impact-d">A GREEN-band RRP is STP-eligible. CAM pre-filled. BRE runs on verified inputs. A file that takes 3–5 days today moves to sanction the same day.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="rule-line" style="background:rgba(0,0,0,.08);"></div>
+
+<!-- DEMO -->
+<section id="demo" style="padding:0;">
+<div id="demo-inner">
+  <span class="label">Prototype · Engine Live</span>
+  <h2>Five live cases. Real engine output.<br><em>Select one — see what TruthStack found.</em></h2>
+  <p class="lead">Each profile is a real borrower scenario from the demo environment — from a clean approval to consortium fraud. Every score, flag, and narration below is the actual engine output.</p>
+  <div class="demo-live">
+    <div class="pulse-dot"></div>
+    <span>Engine Live · Real checks · Real RRP output</span>
+  </div>
+
+  <!-- ROW 1 — 3 entities -->
+  <div class="entity-grid">
+    <div class="entity-tile active" data-id="E001" onclick="selectEntity(this)">
+      <div class="et-id">E001</div>
+      <div class="et-scenario">Clean Approval</div>
+      <div class="et-score" style="color:#5dca93;">TruthScore 84.8</div>
+      <span class="et-badge badge-approve">Auto approve</span>
+      <div class="et-desc">Arjun Traders. All 82 checks pass. Recency 89.8, Accuracy 93.0. No fraud signals detected.</div>
+    </div>
+    <div class="entity-tile" data-id="E004" onclick="selectEntity(this)">
+      <div class="et-id">E004</div>
+      <div class="et-scenario">Duplicate Financing</div>
+      <div class="et-score" style="color:#e07070;">TruthScore 52.9</div>
+      <span class="et-badge badge-reject">Auto reject</span>
+      <div class="et-desc">Atlas Exports. Same invoice financed at multiple lenders — F4.5 hard stop. AI flags tamper and signature failure.</div>
+    </div>
+    <div class="entity-tile" data-id="E005" onclick="selectEntity(this)">
+      <div class="et-id">E005</div>
+      <div class="et-scenario">Identity Failure</div>
+      <div class="et-score" style="color:#e07070;">TruthScore 29.5</div>
+      <span class="et-badge badge-review">Manual review</span>
+      <div class="et-desc">Nexus Pharma. Invoice number identity mismatch — CP2 CRITICAL. Recency 10.0 — severely stale documents.</div>
+    </div>
+  </div>
+
+  <!-- ROW 2 — 2 entities -->
+  <div class="entity-grid-row2">
+    <div class="entity-tile" data-id="E006" onclick="selectEntity(this)">
+      <div class="et-id">E006</div>
+      <div class="et-scenario">Consortium Fraud</div>
+      <div class="et-score" style="color:#e07070;">TruthScore 56.1</div>
+      <span class="et-badge badge-reject">Auto reject</span>
+      <div class="et-desc">Delta Distributors. Seller in consortium fraud registry — F4.1 CRITICAL. Buyer contradicts seller claim.</div>
+    </div>
+    <div class="entity-tile" data-id="E007" onclick="selectEntity(this)">
+      <div class="et-id">E007</div>
+      <div class="et-scenario">Cross-Source Mismatch</div>
+      <div class="et-score" style="color:#e8b84a;">TruthScore 65.4</div>
+      <span class="et-badge badge-review">Manual review</span>
+      <div class="et-desc">Vishwa Trading. Invoice identity failure. Accuracy 49.0 — amount, name, GST and payment all mismatched.</div>
+    </div>
+  </div>
+
+  <!-- INLINE RESULT PANEL -->
+  <div class="result-panel visible" id="result-panel"></div>
+
+  <!-- FULL APP IFRAME — hidden until visitor clicks "Explore full app" -->
+  <div class="demo-frame-wrap" id="demo-frame-wrap">
+    <iframe id="demo-frame" src="" title="TruthStack Prototype — Live App" allow="fullscreen"></iframe>
+  </div>
+
+  <div class="demo-ctx">
+    <div class="demo-ctx-c">
+      <div class="demo-ctx-lbl">What you're seeing</div>
+      <div class="demo-ctx-txt">The actual TruthStack engine output — not a mockup. Pre-loaded MSME applications. Real check sequence. Real RRP verdict.</div>
+    </div>
+    <div class="demo-ctx-c">
+      <div class="demo-ctx-lbl">What it doesn't show</div>
+      <div class="demo-ctx-txt">Live government API integration is a subsequent layer. Production adds GST portal, MCA21, and bank API live pulls on submission.</div>
+    </div>
+    <div class="demo-ctx-c">
+      <div class="demo-ctx-lbl">What the pilot adds</div>
+      <div class="demo-ctx-txt">Your files. Your thresholds. Your product configuration. Same engine — inside your own infrastructure.</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CLOSE -->
+<section id="close">
+<div id="close-inner">
+  <span class="label">From prototype to pilot</span>
+  <h2>If the problem is real for you —<br><em>let's run it on your files.</em></h2>
+  <p class="close-founder-note">Two founders — one who built the engine, one who spent six years in MSME fintech watching bad loans start with unverified data. TruthStack is the product we wish had existed when we were on the lender side. The engine is pilot-ready. We are looking for two or three lenders who want to know — before a single rupee disburses — whether the file in front of them is Lendable Truth.</p>
+  <div class="close-cta-box">
+    <div class="close-cta-h">A 45-minute call.<br><em>Your cases. Our engine. Real output.</em></div>
+    <div class="close-cta-d">We'll run three of your recent MSME files through the prototype live — anonymised if needed — and show you exactly what the RRP would have flagged before sanction. No deck. No demo recording. The engine runs while you watch.</div>
+    <div class="cta-actions">
+      <a class="cta-primary" href="/cdn-cgi/l/email-protection#fd8b9893969c89988e95bd898f8889958e899c9e96d39c94c28e889f97989e89c0b9948e9e928b988f84ddbe9c9191ddaf988c88988e89">Schedule a discovery call</a>
+      <a class="cta-secondary" href="/cdn-cgi/l/email-protection#1365727f7f7676607b53676166677b60677270783d727a">Or email us directly →</a>
+    </div>
+  </div>
+  <div class="pilot-steps">
+    <div class="pilot-steps-lbl">What a pilot looks like</div>
+    <div class="pilot-step"><div class="ps-n">01</div><div class="ps-b"><strong>Configure</strong> — product type, risk parameters, tolerance thresholds. One call. One hour.</div></div>
+    <div class="pilot-step"><div class="ps-n">02</div><div class="ps-b"><strong>Run</strong> — your pipeline files in, Risk Ready Packets and CAM Bridge out. Compare output to your current process.</div></div>
+    <div class="pilot-step"><div class="ps-n">03</div><div class="ps-b"><strong>Decide</strong> — full integration is one sprint. Or walk away with a clear view of what your current process is missing.</div></div>
+  </div>
+  <div class="close-contact">
+    <strong>Venkatesh Murthy</strong> · <a href="/cdn-cgi/l/email-protection#2355464d48425746504b63575156574b50574240480d424a"><span class="__cf_email__" data-cfemail="cbbdaea5a0aabfaeb8a38bbfb9bebfa3b8bfaaa8a0e5aaa2">[email&#160;protected]</span></a> &nbsp;·&nbsp;
+    <strong>Valleesh Athreya</strong> · <a href="/cdn-cgi/l/email-protection#a7d1c6cbcbc2c2d4cfe7d3d5d2d3cfd4d3c6c4cc89c6ce"><span class="__cf_email__" data-cfemail="7b0d1a17171e1e08133b0f090e0f13080f1a1810551a12">[email&#160;protected]</span></a>
+  </div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<div style="border-top:1px solid var(--rule);padding:24px clamp(20px,5vw,80px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;background:var(--bg);">
+  <div style="font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);">TRUTHSTACK</div>
+  <div style="display:flex;gap:20px;flex-wrap:wrap;">
+    <a href="#problem" style="font-family:var(--mono);font-size:10px;color:var(--ink4);text-decoration:none;">Problem</a>
+    <a href="#science" style="font-family:var(--mono);font-size:10px;color:var(--ink4);text-decoration:none;">Science</a>
+    <a href="#rrp" style="font-family:var(--mono);font-size:10px;color:var(--ink4);text-decoration:none;">RRP</a>
+    <a href="#cambridge" style="font-family:var(--mono);font-size:10px;color:var(--ink4);text-decoration:none;">CAM Bridge</a>
+    <a href="#demo" style="font-family:var(--mono);font-size:10px;color:var(--ink4);text-decoration:none;">Demo</a>
+    <a href="#close" style="font-family:var(--mono);font-size:10px;color:var(--ink4);text-decoration:none;">Contact</a>
+  </div>
+  <div style="font-family:var(--mono);font-size:9px;color:var(--ink4);">© 2026 TruthStack · Forensic Verification Infrastructure</div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const DEMO_APP_URL = 'https://psbx.onrender.com/';
+
+const ENTITIES = {
+  // Source: TruthStack demo environment · psbx.onrender.com · extracted 2026-04-10
+  // Scores, RATF breakdowns, pass/fail counts and flags are verbatim from the stored engine result.
+  // narration: composed from real flag data (the overview field in DB held a terse system string).
+
+  E001: {
+    name:       `Arjun Traders Pvt Ltd`,
+    meta:       `GSTIN 27AABCA1234F1ZP · Invoice Factoring · ₹13,12,500`,
+    score:      84.8,
+    scoreColor: `#5dca93`,
+    decision:   `AUTO_APPROVE`,
+    ratf:       [{l:`Recency`,w:`20%`,v:89.8},{l:`Accuracy`,w:`40%`,v:93.0},{l:`Traceability`,w:`25%`,v:60.4},{l:`Fraud (inv)`,w:`15%`,v:100.0}],
+    pass:       82,
+    fail:       11,
+    flags:      [],
+    narration:  `All 82 checks pass within tolerance. Recency 89.8 — documents are within the required freshness window. Accuracy 93.0 — GST returns, bank statements, and invoice copies are fully reconciled across all 15 cross-source checkpoints. Fraud score 100.0 — zero fraud signals across all 50 deterministic checks. <strong>TruthScore 84.8 GREEN. This file is Lendable Truth.</strong>`,
+  },
+
+  E004: {
+    name:       `Atlas Exports LLC`,
+    meta:       `GSTIN 19AABCA9988B1ZT · Purchase Order Finance · ₹32,00,000`,
+    score:      52.9,
+    scoreColor: `#e07070`,
+    decision:   `AUTO_REJECT`,
+    ratf:       [{l:`Recency`,w:`20%`,v:74.8},{l:`Accuracy`,w:`40%`,v:63.0},{l:`Traceability`,w:`25%`,v:52.9},{l:`Fraud (inv)`,w:`15%`,v:0}],
+    pass:       68,
+    fail:       22,
+    flags: [
+      {sev:`P0`,h:`Multiple lenders financing same invoice — duplicate financing`,d:`F4.5 CRITICAL. DQS penalty −100. Score floors at zero. Cross-lender notification triggered automatically. No commitment can be made until consortium clearance is obtained.`},
+      {sev:`P1`,h:`Payment amount integrity — three-checkpoint composite flag`,d:`CP11 + CP15 + F3.7 fired simultaneously. Banking credit shortfall vs invoice total exceeds 10%. Consolidated into single Payment Amount Integrity flag.`},
+      {sev:`P1`,h:`Invoice amount mismatch — GST return vs invoice copy`,d:`CP1: variance between GST-declared amount and submitted invoice exceeds the 5% tolerance threshold.`},
+      {sev:`P1`,h:`Beneficiary name mismatch — cross-document identity conflict`,d:`CP13: beneficiary name on payment instruction does not match entity name on invoice and GST records.`},
+      {sev:`P1`,h:`Invoice amount flagged as exact duplicate in consortium registry`,d:`F1.11: same invoice amount fingerprint found in consortium registry. Corroborates F4.5 duplicate financing flag.`},
+      {sev:`P1`,h:`Digital signature verification failure`,d:`F1.20: PDF digital signature does not pass cryptographic verification. Document integrity cannot be confirmed by engine.`},
+      {sev:`P1`,h:`Invoice amount tamper suspicion — AI document forensics`,d:`AI Layer: document forensics detects statistical anomalies consistent with post-creation amount modification.`},
+    ],
+    narration: `Duplicate invoice financing confirmed — same invoice submitted to multiple lenders simultaneously (F4.5 CRITICAL, DQS −100, score floors at zero). Fraud score 0.0 across all 50 checks. Payment amount integrity fails at three independent cross-source checkpoints. Beneficiary name mismatch and digital signature failure compound the document integrity picture. AI forensics flags post-creation tampering. <strong>Gate 1 hard stop. Cross-lender notification sent automatically. No further processing permitted.</strong>`,
+  },
+
+  E005: {
+    name:       `Nexus Pharma Distributors`,
+    meta:       `GSTIN 33AABCN7766E1ZR · Supply Chain Finance · ₹18,75,001`,
+    score:      29.5,
+    scoreColor: `#e07070`,
+    decision:   `MANUAL_REVIEW`,
+    ratf:       [{l:`Recency`,w:`20%`,v:10.0},{l:`Accuracy`,w:`40%`,v:41.0},{l:`Traceability`,w:`25%`,v:26.1},{l:`Fraud (inv)`,w:`15%`,v:32.0}],
+    pass:       70,
+    fail:       23,
+    flags: [
+      {sev:`P0`,h:`Invoice number identity failure — exact match required`,d:`CP2 CRITICAL. Invoice number does not match exactly across GST return, bank narration, and invoice copy. Tier 1 identity field — zero tolerance. Primary integrity failure on this file.`},
+      {sev:`P1`,h:`Payment amount integrity — three-checkpoint composite flag`,d:`CP11 + CP15 + F3.7 composite. Banking credits do not reconcile with invoice total across three independent checkpoints.`},
+      {sev:`P1`,h:`Invoice amount mismatch — GST return vs invoice copy`,d:`CP1: declared GST amount and submitted invoice amount diverge beyond 5% tolerance.`},
+      {sev:`P1`,h:`Beneficiary name mismatch — cross-document identity conflict`,d:`CP13: beneficiary name is inconsistent across payment records, invoice, and GST entity data.`},
+      {sev:`P1`,h:`Digital signature verification failure`,d:`F1.20: cryptographic signature check fails. Document integrity unconfirmable.`},
+      {sev:`P1`,h:`Payment settled before invoice date`,d:`F1.15: bank credit timestamp precedes invoice creation date — temporally impossible under normal trading. Backdating or fabrication signal.`},
+    ],
+    narration: `Recency 10.0 — documents are severely outside the freshness window; stale evidence across the board. Invoice number fails exact identity match against GST records (CP2 CRITICAL — Tier 1 identity field, zero tolerance). Payment was recorded in the bank before the invoice date — temporally impossible, signalling backdating or fabrication. Accuracy 41.0 reflects multiple cross-source failures in parallel. <strong>TruthScore 29.5 RED. CRITICAL and HIGH severity failures require full analyst resolution before any credit decision.</strong>`,
+  },
+
+  E006: {
+    name:       `Delta Distributors Pvt Ltd`,
+    meta:       `GSTIN 36AABCD1155F1ZS · Unsecured Working Capital · ₹44,84,000`,
+    score:      56.1,
+    scoreColor: `#e07070`,
+    decision:   `AUTO_REJECT`,
+    ratf:       [{l:`Recency`,w:`20%`,v:90.0},{l:`Accuracy`,w:`40%`,v:63.0},{l:`Traceability`,w:`25%`,v:52.9},{l:`Fraud (inv)`,w:`15%`,v:0}],
+    pass:       65,
+    fail:       23,
+    flags: [
+      {sev:`P0`,h:`Seller flagged in consortium fraud registry — confirmed fraud history`,d:`F4.1 CRITICAL. Entity confirmed in cross-lender fraud intelligence registry. Gate 1 hard stop — no further processing regardless of any other check results.`},
+      {sev:`P1`,h:`Payment amount integrity — three-checkpoint composite flag`,d:`CP11 + CP15 + F3.7 composite. Banking credits do not reconcile with invoice total.`},
+      {sev:`P1`,h:`Invoice amount mismatch — GST return vs invoice copy`,d:`CP1: GST-declared and submitted invoice amounts diverge beyond tolerance.`},
+      {sev:`P1`,h:`Beneficiary name mismatch`,d:`CP13: beneficiary name inconsistent across payment records and invoice.`},
+      {sev:`P1`,h:`Digital signature verification failure`,d:`F1.20: PDF signature fails cryptographic verification.`},
+      {sev:`P1`,h:`Buyer confirmation contradicts seller claim`,d:`F3.9: independent buyer confirmation data directly contradicts seller's stated invoice terms — an active deception signal, not a data quality gap.`},
+      {sev:`P1`,h:`Invoice amount tamper suspicion — AI document forensics`,d:`AI Layer: statistical anomalies in invoice document consistent with post-creation amount modification.`},
+    ],
+    narration: `Seller entity confirmed in the cross-lender consortium fraud registry (F4.1 CRITICAL) — Gate 1 triggers immediately regardless of score or any other check outcome. Fraud score 0.0. Buyer's independently obtained confirmation directly contradicts seller's invoice claim — active deception, not a data quality gap. AI document forensics flags tampering. Despite a strong Recency score (90.0), no fraud check passes. <strong>AUTO_REJECT at Gate 1. Consortium registry notification sent. No analyst review.</strong>`,
+  },
+
+  E007: {
+    name:       `Vishwa Trading Co`,
+    meta:       `GSTIN 24AABCV2211K1ZN · Secured MSME Term Loan · ₹10,44,067`,
+    score:      65.4,
+    scoreColor: `#e8b84a`,
+    decision:   `MANUAL_REVIEW`,
+    ratf:       [{l:`Recency`,w:`20%`,v:98.0},{l:`Accuracy`,w:`40%`,v:49.0},{l:`Traceability`,w:`25%`,v:60.4},{l:`Fraud (inv)`,w:`15%`,v:77.0}],
+    pass:       73,
+    fail:       20,
+    flags: [
+      {sev:`P0`,h:`Invoice number identity failure — exact match required`,d:`CP2 CRITICAL. Invoice number does not match exactly across GST return, bank narration, and invoice copy. Tier 1 identity field — zero tolerance.`},
+      {sev:`P1`,h:`Invoice amount mismatch`,d:`CP1: invoice amount variance between GST return and invoice copy exceeds 5% tolerance.`},
+      {sev:`P1`,h:`Beneficiary name mismatch`,d:`CP13: beneficiary name conflicts across payment instruction and GST entity records.`},
+      {sev:`P1`,h:`Digital signature verification failure`,d:`F1.20: PDF signature fails cryptographic verification.`},
+      {sev:`P1`,h:`GST amount mismatch — tax calculation discrepancy`,d:`CP8: GST amount on invoice does not match GSTR-3B declared tax. Composite flag risk with F1.8.`},
+      {sev:`P1`,h:`Payment amount mismatch — bank credit vs invoice total`,d:`CP11: banking credit received does not reconcile with full invoice total.`},
+    ],
+    narration: `Strong Recency (98.0) and solid Fraud scores (77.0) — documents are current and most fraud checks pass. The failure is in Accuracy at 49.0: invoice number, invoice amount, beneficiary name, GST amount, and payment amount all fail cross-source reconciliation simultaneously. Five separate data consistency failures across the accuracy layer — more consistent with a data quality problem than active fraud, but requiring resolution before credit can proceed. <strong>TruthScore 65.4 AMBER. Analyst to resolve accuracy layer failures.</strong>`,
+  },
+
+};
+
+const BADGE_CLASS = { AUTO_APPROVE:'badge-approve', MANUAL_REVIEW:'badge-review', AUTO_REJECT:'badge-reject' };
+const BADGE_LABEL = { AUTO_APPROVE:'Auto approve', MANUAL_REVIEW:'Manual review', AUTO_REJECT:'Auto reject' };
+
+function barColor(v) { return v >= 75 ? '#5dca93' : v >= 50 ? '#e8b84a' : '#e07070'; }
+
+function renderResult(id) {
+  const e = ENTITIES[id];
+  const panel = document.getElementById('result-panel');
+
+  const flagsHtml = e.flags.length === 0
+    ? '<div class="rp-no-flags">✓ No flags raised — all checks pass within tolerance</div>'
+    : e.flags.map(f => `<div class="rp-flag"><span class="rp-fpill ${f.sev==='P0'?'rp-pill-p0':'rp-pill-p1'}">${f.sev}</span><div><div class="rp-flag-h">${f.h}</div><div class="rp-flag-d">${f.d}</div></div></div>`).join('');
+
+  const barsHtml = e.ratf.map(r => {
+    const c = barColor(r.v);
+    return `<div class="rp-bar-row"><div class="rp-bar-name">${r.l} <span style="color:rgba(255,255,255,.25);font-size:9px;">${r.w}</span></div><div class="rp-bar-track"><div class="rp-bar-fill" style="width:${r.v}%;background:${c};"></div></div><div class="rp-bar-val" style="color:${c};">${r.v.toFixed(1)}</div></div>`;
+  }).join('');
+
+  const passW = Math.round((e.pass / (e.pass + e.fail)) * 100);
+
+  panel.innerHTML = `
+    <div class="rp-head">
+      <div><div class="rp-entity-name">${e.name}</div><div class="rp-entity-meta">${e.meta}</div></div>
+      <div class="rp-score-block">
+        <div class="rp-score-num" style="color:${e.scoreColor};">${e.score}</div>
+        <div class="rp-score-label">/100 &nbsp; <span class="et-badge ${BADGE_CLASS[e.decision]}">${BADGE_LABEL[e.decision]}</span></div>
+      </div>
+    </div>
+    <div class="rp-body">
+      <div class="rp-ratf">
+        <div class="rp-col-lbl">RATF breakdown</div>
+        ${barsHtml}
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.06);">
+        <div style="display:flex;height:5px;border-radius:2px;overflow:hidden;margin-bottom:5px;"><div style="width:${passW}%;background:#5dca93;"></div><div style="flex:1;background:#e07070;"></div></div>
+          <div style="font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.35);"><span style="color:#5dca93;">${e.pass} passed</span> &nbsp; <span style="color:#e07070;">${e.fail} failed</span> &nbsp; of ${e.pass+e.fail} checks</div>
+        </div>
+      </div>
+      <div class="rp-flags-col"><div class="rp-col-lbl">Active flags · smart flagging</div>${flagsHtml}</div>
+    </div>
+    <div class="rp-narr">${e.narration}</div>
+    <div class="rp-actions">
+      <a class="rp-open-btn" href="${DEMO_APP_URL}" target="_blank" rel="noopener">Explore full app →</a>
+      <div class="rp-open-note">Opens the live TruthStack prototype in a new tab.<br>Select any entity to run the full RRP and CAM Bridge output.</div>
+    </div>`;
+
+  panel.classList.add('visible');
+}
+
+function selectEntity(tile) {
+  document.querySelectorAll('.entity-tile').forEach(t => t.classList.remove('active'));
+  tile.classList.add('active');
+  renderResult(tile.getAttribute('data-id'));
+  document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+renderResult('E001');
+</script>
+</body>
+</html>
